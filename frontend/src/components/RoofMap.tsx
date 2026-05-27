@@ -1,19 +1,14 @@
 "use client";
 
-import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef } from "react";
 import type { InsightsResponse, SolarPanel } from "@/lib/api";
+import { mapsLoader } from "@/lib/maps-loader";
 
 interface Props {
   center: { lat: number; lng: number };
   insights: InsightsResponse | null;
   panelLimit: number; // top-N panels by yearly energy
 }
-
-const loader = new Loader({
-  apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
-  version: "weekly",
-});
 
 // Convert meters offset to a lat/lng delta — flat-earth approx is fine at building scale
 function offsetLatLng(
@@ -59,7 +54,7 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
 
   // Init map once
   useEffect(() => {
-    loader.importLibrary("maps").then((maps) => {
+    mapsLoader.importLibrary("maps").then((maps) => {
       if (!mapRef.current || mapInstance.current) return;
       mapInstance.current = new maps.Map(mapRef.current, {
         center,

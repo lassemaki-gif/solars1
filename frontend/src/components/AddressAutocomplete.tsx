@@ -1,25 +1,19 @@
 "use client";
 
-import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef } from "react";
+import { mapsLoader } from "@/lib/maps-loader";
 
 interface Props {
   onPlace: (place: { lat: number; lng: number; address: string }) => void;
   placeholder?: string;
 }
 
-const loader = new Loader({
-  apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
-  version: "weekly",
-  libraries: ["places"],
-});
-
 export function AddressAutocomplete({ onPlace, placeholder }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let ac: google.maps.places.Autocomplete | null = null;
-    loader.importLibrary("places").then((places) => {
+    mapsLoader.importLibrary("places").then((places) => {
       if (!inputRef.current) return;
       ac = new places.Autocomplete(inputRef.current, {
         // Focus the Nordics to reduce irrelevant suggestions
