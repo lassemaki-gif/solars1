@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     # Nordic financial model defaults
     default_electricity_price_eur_per_kwh: float = 0.18
     default_feed_in_price_eur_per_kwh: float = 0.05
-    default_install_cost_eur_per_kwp: float = 1500.0
+    default_install_cost_eur_per_kwp: float = 750.0
     default_self_consumption_ratio: float = 0.45
     default_annual_degradation: float = 0.005
     default_discount_rate: float = 0.03

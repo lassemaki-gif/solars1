@@ -23,7 +23,7 @@ export function Configurator({ insights, finance, loadingFinance, targetPanels, 
 
   const [elec, setElec] = useState(0.18);
   const [fit, setFit] = useState(0.05);
-  const [capex, setCapex] = useState(1500);
+  const [capex, setCapex] = useState(750);
   const [scr, setScr] = useState(0.45);
 
   const emit = (patch: Partial<{ targetPanels: number; elec: number; fit: number; capex: number; scr: number }>) => {
@@ -93,7 +93,7 @@ export function Configurator({ insights, finance, loadingFinance, targetPanels, 
             unit="€/kWp"
             value={capex}
             step={50}
-            min={800}
+            min={400}
             max={2500}
             onChange={(v) => { setCapex(v); emit({ capex: v }); }}
           />

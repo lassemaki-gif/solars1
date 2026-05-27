@@ -21,7 +21,7 @@ export default function Home() {
   const [financeParams, setFinanceParams] = useState({
     electricity_price: 0.18,
     feed_in_price: 0.05,
-    install_cost_per_kwp: 1500,
+    install_cost_per_kwp: 750,
     self_consumption_ratio: 0.45,
   });
   const [loadingInsights, setLoadingInsights] = useState(false);
