@@ -7,12 +7,17 @@ import { mapsLoader } from "@/lib/maps-loader";
 interface Props {
   center: { lat: number; lng: number };
   insights: InsightsResponse | null;
-  panelLimit: number; // top-N panels by yearly energy
+  panelLimit: number;
 }
 
-const R_EARTH = 6378137; // metres
+// Screen-space data for one projected panel
+interface PanelScreenData {
+  // Corners in screen pixels: [TL, TR, BR, BL]
+  corners: [[number, number], [number, number], [number, number], [number, number]];
+}
 
-// Convert meters offset to a lat/lng delta — flat-earth approx is fine at building scale
+const R_EARTH = 6378137;
+
 function offsetLatLng(
   origin: google.maps.LatLngLiteral,
   dxMeters: number,
@@ -60,17 +65,30 @@ function computeHeading(
   return (Math.atan2(y, x) * 180) / Math.PI;
 }
 
-/**
- * Project panel corners onto the Street View viewport using perspective math.
- *
- * Coordinate system: East-North-Up (ENU) relative to the panorama position.
- * Camera axes derived from heading (H) and pitch (P):
- *   forward = (sin H cos P,  cos H cos P,  sin P)
- *   right   = (cos H,       -sin H,        0    )
- *   up      = (-sin H sin P, -cos H sin P, cos P )
- *
- * Horizontal FOV at zoom z: 180° / 2^z  (zoom 0 = 180°, zoom 1 = 90°, etc.)
- */
+// Bilinear interpolation across the panel's 4 projected corners.
+// u=0 left, u=1 right; v=0 top, v=1 bottom.
+function bilerp(
+  c: [[number,number],[number,number],[number,number],[number,number]],
+  u: number,
+  v: number,
+): [number, number] {
+  const x = (1-u)*(1-v)*c[0][0] + u*(1-v)*c[1][0] + u*v*c[2][0] + (1-u)*v*c[3][0];
+  const y = (1-u)*(1-v)*c[0][1] + u*(1-v)*c[1][1] + u*v*c[2][1] + (1-u)*v*c[3][1];
+  return [x, y];
+}
+
+// Returns SVG path data for a single grid line at parameter t along the given axis.
+function gridLinePath(
+  c: [[number,number],[number,number],[number,number],[number,number]],
+  t: number,
+  axis: "h" | "v",
+): string {
+  const [a, b] = axis === "v"
+    ? [bilerp(c, t, 0), bilerp(c, t, 1)]  // vertical divider
+    : [bilerp(c, 0, t), bilerp(c, 1, t)]; // horizontal divider
+  return `M${a[0].toFixed(1)},${a[1].toFixed(1)} L${b[0].toFixed(1)},${b[1].toFixed(1)}`;
+}
+
 function projectPanelsToSV(
   panels: SolarPanel[],
   panelLimit: number,
@@ -79,72 +97,115 @@ function projectPanelsToSV(
   pov: google.maps.StreetViewPov,
   vpW: number,
   vpH: number,
-): string[] {
+): PanelScreenData[] {
   if (!insights.panelWidthMeters || !insights.panelHeightMeters) return [];
 
   const H = (pov.heading * Math.PI) / 180;
-  const P = (pov.pitch  * Math.PI) / 180;
+  const P = (pov.pitch   * Math.PI) / 180;
   const zoom = pov.zoom ?? 1;
-
-  // Half-angle of horizontal FOV in radians
-  const halfFovH = (Math.PI / Math.pow(2, zoom + 1));
+  const halfFovH = Math.PI / Math.pow(2, zoom + 1);
   const halfFovV = Math.atan(Math.tan(halfFovH) * (vpH / vpW));
-
-  const CAM_HEIGHT = 1.5; // approximate Street View camera height above ground (m)
+  const CAM_HEIGHT = 1.5;
 
   const sorted = [...panels].sort((a, b) => b.yearlyEnergyDcKwh - a.yearlyEnergyDcKwh);
   const chosen = sorted.slice(0, panelLimit);
-
-  const result: string[] = [];
+  const result: PanelScreenData[] = [];
 
   for (const panel of chosen) {
     const seg = insights.roofSegmentStats?.[panel.segmentIndex];
     const panelHeight = seg?.planeHeightAtCenterMeters ?? 5;
     const azimuth = seg?.azimuthDegrees ?? 0;
-    const corners = panelPolygonPath(panel, insights.panelWidthMeters!, insights.panelHeightMeters!, azimuth);
+    const corners2D = panelPolygonPath(panel, insights.panelWidthMeters!, insights.panelHeightMeters!, azimuth);
 
-    const screenPts: string[] = [];
+    const screenCorners: [number, number][] = [];
     let valid = true;
 
-    for (const corner of corners) {
-      // ENU offset from panorama to corner
-      const dLat = corner.lat - panoPos.lat;
-      const dLng = corner.lng - panoPos.lng;
-      const north = dLat * R_EARTH * (Math.PI / 180);
-      const east  = dLng * R_EARTH * (Math.PI / 180) * Math.cos(panoPos.lat * Math.PI / 180);
+    for (const corner of corners2D) {
+      const north = (corner.lat - panoPos.lat) * R_EARTH * (Math.PI / 180);
+      const east  = (corner.lng - panoPos.lng) * R_EARTH * (Math.PI / 180) * Math.cos(panoPos.lat * Math.PI / 180);
       const up    = panelHeight - CAM_HEIGHT;
 
-      // Project onto camera axes
       const fwd   =  east * Math.sin(H) * Math.cos(P) + north * Math.cos(H) * Math.cos(P) + up * Math.sin(P);
       const right =  east * Math.cos(H) - north * Math.sin(H);
       const camUp = -east * Math.sin(H) * Math.sin(P) - north * Math.cos(H) * Math.sin(P) + up * Math.cos(P);
 
-      if (fwd <= 0.5) { valid = false; break; } // behind or too close to camera
+      if (fwd <= 0.5) { valid = false; break; }
 
-      // Perspective divide → NDC [-1, 1]
-      const ndcX =  right / (fwd * Math.tan(halfFovH));
-      const ndcY = camUp  / (fwd * Math.tan(halfFovV));
-
-      // NDC → screen pixels (Y flipped: SVG Y increases downward)
-      const sx = ((ndcX + 1) / 2) * vpW;
-      const sy = ((1 - ndcY) / 2) * vpH;
-      screenPts.push(`${sx.toFixed(1)},${sy.toFixed(1)}`);
+      const sx = (( right / (fwd * Math.tan(halfFovH)) + 1) / 2) * vpW;
+      const sy = ((1 - camUp / (fwd * Math.tan(halfFovV))) / 2) * vpH;
+      screenCorners.push([sx, sy]);
     }
 
-    if (!valid) continue;
+    if (!valid || screenCorners.length !== 4) continue;
 
-    // Skip panels entirely outside the viewport (with margin for partially visible ones)
     const margin = 300;
-    const pts = screenPts.map((s) => s.split(",").map(Number) as [number, number]);
-    const anyVisible = pts.some(([x, y]) =>
-      x > -margin && x < vpW + margin && y > -margin && y < vpH + margin
+    const anyVisible = screenCorners.some(
+      ([x, y]) => x > -margin && x < vpW + margin && y > -margin && y < vpH + margin
     );
     if (!anyVisible) continue;
 
-    result.push(screenPts.join(" "));
+    result.push({
+      corners: screenCorners as [[number,number],[number,number],[number,number],[number,number]],
+    });
   }
 
   return result;
+}
+
+// Renders one realistic solar panel in SVG space.
+// Corners order: TL, TR, BR, BL (matches panelPolygonPath output).
+function SvPanel({ corners, index }: { corners: PanelScreenData["corners"]; index: number }) {
+  const pts = corners.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
+  const clipId = `sv-pc-${index}`;
+  const gradId = `sv-pg-${index}`;
+
+  // Grid: 6 columns × 10 rows (standard 60-cell monocrystalline panel)
+  const COLS = 6;
+  const ROWS = 10;
+
+  const vPaths = Array.from({ length: COLS - 1 }, (_, k) =>
+    gridLinePath(corners, (k + 1) / COLS, "v")
+  ).join(" ");
+
+  const hPaths = Array.from({ length: ROWS - 1 }, (_, k) =>
+    gridLinePath(corners, (k + 1) / ROWS, "h")
+  ).join(" ");
+
+  // Gradient: TL → BR for a subtle cross-light sheen
+  const [x1, y1] = corners[0];
+  const [x2, y2] = corners[2];
+
+  return (
+    <g>
+      <defs>
+        <clipPath id={clipId}>
+          <polygon points={pts} />
+        </clipPath>
+        <linearGradient id={gradId} gradientUnits="userSpaceOnUse"
+          x1={x1.toFixed(1)} y1={y1.toFixed(1)}
+          x2={x2.toFixed(1)} y2={y2.toFixed(1)}>
+          <stop offset="0%"   stopColor="#7ab0e0" stopOpacity="0.18" />
+          <stop offset="40%"  stopColor="#4070a0" stopOpacity="0.06" />
+          <stop offset="100%" stopColor="#000820" stopOpacity="0.00" />
+        </linearGradient>
+      </defs>
+
+      {/* Panel base — dark monocrystalline blue-black */}
+      <polygon points={pts} fill="#0c1a28" fillOpacity={0.92} />
+
+      {/* Cell grid lines, clipped to panel shape */}
+      <g clipPath={`url(#${clipId})`}>
+        <path d={vPaths} stroke="rgba(255,255,255,0.09)" strokeWidth={0.6} fill="none" />
+        <path d={hPaths} stroke="rgba(255,255,255,0.09)" strokeWidth={0.6} fill="none" />
+      </g>
+
+      {/* Specular sheen gradient */}
+      <polygon points={pts} fill={`url(#${gradId})`} />
+
+      {/* Aluminum frame */}
+      <polygon points={pts} fill="none" stroke="#a8b0b8" strokeWidth={1.4} strokeOpacity={0.85} />
+    </g>
+  );
 }
 
 export function RoofMap({ center, insights, panelLimit }: Props) {
@@ -157,28 +218,20 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
   const svService = useRef<google.maps.StreetViewService | null>(null);
   const [svUnavailable, setSvUnavailable] = useState(false);
   const [svReady, setSvReady] = useState(false);
-  const [svPanelPolygons, setSvPanelPolygons] = useState<string[]>([]);
+  const [svPanels, setSvPanels] = useState<PanelScreenData[]>([]);
 
   // Init satellite map once
   useEffect(() => {
     mapsLoader.importLibrary("maps").then((maps) => {
       if (!mapRef.current || mapInstance.current) return;
       mapInstance.current = new maps.Map(mapRef.current, {
-        center,
-        zoom: 20,
-        mapTypeId: "satellite",
-        tilt: 0,
-        disableDefaultUI: true,
-        zoomControl: true,
-        gestureHandling: "greedy",
+        center, zoom: 20, mapTypeId: "satellite",
+        tilt: 0, disableDefaultUI: true, zoomControl: true, gestureHandling: "greedy",
       });
     });
   }, [center]);
 
-  // Recenter satellite on address change
-  useEffect(() => {
-    mapInstance.current?.panTo(center);
-  }, [center]);
+  useEffect(() => { mapInstance.current?.panTo(center); }, [center]);
 
   // Redraw satellite panel polygons
   useEffect(() => {
@@ -207,13 +260,9 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
       svService.current = new sv.StreetViewService();
       svPanorama.current = new sv.StreetViewPanorama(svRef.current, {
         disableDefaultUI: true,
-        motionTracking: false,
-        motionTrackingControl: false,
-        linksControl: false,
-        panControl: false,
-        zoomControl: false,
-        addressControl: false,
-        fullscreenControl: false,
+        motionTracking: false, motionTrackingControl: false,
+        linksControl: false, panControl: false,
+        zoomControl: false, addressControl: false, fullscreenControl: false,
       });
       setSvReady(true);
     });
@@ -223,7 +272,7 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
   useEffect(() => {
     if (!svService.current || !svPanorama.current) return;
     setSvUnavailable(false);
-    setSvPanelPolygons([]);
+    setSvPanels([]);
     svService.current.getPanorama(
       { location: center, radius: 50, source: google.maps.StreetViewSource.OUTDOOR, preference: google.maps.StreetViewPreference.NEAREST },
       (data, status) => {
@@ -239,11 +288,11 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
     );
   }, [center]);
 
-  // Project panels onto Street View — re-runs on pov_changed / position_changed
+  // Project panels to Street View — updates on pov_changed / position_changed
   useEffect(() => {
     if (!svReady || !svPanorama.current || !svRef.current) return;
     if (!insights?.solarPanels || !insights.panelWidthMeters || !insights.panelHeightMeters) {
-      setSvPanelPolygons([]);
+      setSvPanels([]);
       return;
     }
 
@@ -251,15 +300,11 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
       if (!svPanorama.current || !svRef.current) return;
       const pos = svPanorama.current.getPosition();
       if (!pos) return;
-      setSvPanelPolygons(
+      setSvPanels(
         projectPanelsToSV(
-          insights.solarPanels!,
-          panelLimit,
-          insights,
-          pos.toJSON(),
-          svPanorama.current.getPov(),
-          svRef.current.clientWidth,
-          svRef.current.clientHeight,
+          insights.solarPanels!, panelLimit, insights,
+          pos.toJSON(), svPanorama.current.getPov(),
+          svRef.current.clientWidth, svRef.current.clientHeight,
         )
       );
     };
@@ -270,32 +315,22 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
     ];
     reproject();
 
-    return () => {
-      listeners.forEach((l) => google.maps.event.removeListener(l));
-    };
+    return () => { listeners.forEach((l) => google.maps.event.removeListener(l)); };
   }, [svReady, center, insights, panelLimit]);
 
   return (
     <div className="w-full h-full flex flex-col">
-      {/* Top half — satellite view with panel overlays */}
+      {/* Top half — satellite view */}
       <div ref={mapRef} className="flex-1 bg-fog" />
 
-      {/* Bottom half — Street View + projected panel SVG overlay */}
+      {/* Bottom half — Street View + realistic panel SVG overlay */}
       <div className="relative flex-1 bg-ink">
         <div ref={svRef} className="w-full h-full" />
 
-        {svPanelPolygons.length > 0 && (
+        {svPanels.length > 0 && (
           <svg className="absolute inset-0 w-full h-full pointer-events-none">
-            {svPanelPolygons.map((pts, i) => (
-              <polygon
-                key={i}
-                points={pts}
-                fill="#0b1d3a"
-                fillOpacity={0.75}
-                stroke="#f7f4ee"
-                strokeWidth={0.8}
-                strokeOpacity={0.9}
-              />
+            {svPanels.map((p, i) => (
+              <SvPanel key={i} corners={p.corners} index={i} />
             ))}
           </svg>
         )}
