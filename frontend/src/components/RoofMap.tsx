@@ -340,22 +340,24 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
     ];
     reproject();
 
-    // Static capture: fixed to the initial facing-the-building POV
-    if (capturedPovRef.current && svRef.current) {
+    // Static capture: fixed dimensions within Street View Static API 640px limit
+    if (capturedPovRef.current) {
       const { pos, pov } = capturedPovRef.current;
-      const w   = svRef.current.clientWidth;
-      const h   = svRef.current.clientHeight;
-      const fov = 180 / Math.pow(2, pov.zoom ?? 1);
+      const CAPTURE_W = 600;
+      const CAPTURE_H = 338;
+      const rawFov = 180 / Math.pow(2, pov.zoom ?? 1);
+      const fov = Math.max(10, Math.min(120, rawFov));
+      const heading = ((pov.heading % 360) + 360) % 360;
       const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
       const imageUrl = `https://maps.googleapis.com/maps/api/streetview`
-        + `?size=${w}x${h}`
+        + `?size=${CAPTURE_W}x${CAPTURE_H}`
         + `&location=${pos.lat},${pos.lng}`
-        + `&heading=${pov.heading.toFixed(2)}`
+        + `&heading=${heading.toFixed(2)}`
         + `&pitch=${(pov.pitch ?? 0).toFixed(2)}`
         + `&fov=${fov}`
         + `&key=${key}`;
-      const panels = projectPanels(insights.solarPanels!, panelLimit, insights, pos, pov, w, h);
-      setCapturedScene({ imageUrl, panels, width: w, height: h });
+      const panels = projectPanels(insights.solarPanels!, panelLimit, insights, pos, pov, CAPTURE_W, CAPTURE_H);
+      setCapturedScene({ imageUrl, panels, width: CAPTURE_W, height: CAPTURE_H });
     }
 
     return () => { listeners.forEach((l) => google.maps.event.removeListener(l)); };
