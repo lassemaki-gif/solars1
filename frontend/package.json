@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/genai": "^2.7.0",
     "@googlemaps/js-api-loader": "^1.16.8",
     "next": "^15.0.3",
     "react": "^19.0.0",

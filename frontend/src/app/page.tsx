@@ -39,8 +39,7 @@ export default function Home() {
       .insights(selection.lat, selection.lng)
       .then((data) => {
         setInsights(data);
-        // Default to filling the roof
-        setTargetPanels(data.maxArrayPanelsCount ?? 1);
+        setTargetPanels(Math.max(1, Math.round((data.maxArrayPanelsCount ?? 1) * 0.5)));
       })
       .catch((err: ApiError) => {
         if (err.code === "no_coverage") {
@@ -162,7 +161,7 @@ function Header({ onReset }: { onReset: () => void }) {
   return (
     <header className="flex items-center justify-between px-8 lg:px-10 h-[72px] border-b border-ink/10">
       <button onClick={onReset} className="font-display text-2xl tracking-tight">
-        SolarScope<span className="text-sun">.</span>
+        SoLars<span className="text-sun">.</span>
       </button>
       <span className="text-xs uppercase tracking-widest text-ash">Nordic edition</span>
     </header>
@@ -192,7 +191,7 @@ function Landing({ onPick }: { onPick: (s: Selection) => void }) {
   return (
     <main className="min-h-screen flex flex-col">
       <header className="flex items-center justify-between px-8 lg:px-12 py-6">
-        <span className="font-display text-2xl tracking-tight">SolarScope<span className="text-sun">.</span></span>
+        <span className="font-display text-2xl tracking-tight">SoLars<span className="text-sun">.</span></span>
         <span className="text-xs uppercase tracking-widest text-ash">Helsinki · Stockholm · Oslo · København</span>
       </header>
 

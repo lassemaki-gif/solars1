@@ -10,16 +10,13 @@ interface Props {
   panelLimit: number;
 }
 
+// zoom is valid at runtime but omitted from some @types/google.maps versions
+type Pov = google.maps.StreetViewPov & { zoom?: number };
+
 interface PanelScreenData {
   corners: [[number, number], [number, number], [number, number], [number, number]];
 }
 
-interface CapturedScene {
-  imageUrl: string;
-  panels: PanelScreenData[];
-  width: number;
-  height: number;
-}
 
 const R_EARTH = 6378137;
 
@@ -70,37 +67,16 @@ function computeHeading(
   return (Math.atan2(y, x) * 180) / Math.PI;
 }
 
-// Bilinear interpolation across the panel's 4 projected screen corners.
-// u=0 left, u=1 right; v=0 top, v=1 bottom.
-function bilerp(
-  c: [[number,number],[number,number],[number,number],[number,number]],
-  u: number, v: number,
-): [number, number] {
-  const x = (1-u)*(1-v)*c[0][0] + u*(1-v)*c[1][0] + u*v*c[2][0] + (1-u)*v*c[3][0];
-  const y = (1-u)*(1-v)*c[0][1] + u*(1-v)*c[1][1] + u*v*c[2][1] + (1-u)*v*c[3][1];
-  return [x, y];
-}
-
-function gridLinePath(
-  c: [[number,number],[number,number],[number,number],[number,number]],
-  t: number,
-  axis: "h" | "v",
-): string {
-  const [a, b] = axis === "v"
-    ? [bilerp(c, t, 0), bilerp(c, t, 1)]
-    : [bilerp(c, 0, t), bilerp(c, 1, t)];
-  return `M${a[0].toFixed(1)},${a[1].toFixed(1)} L${b[0].toFixed(1)},${b[1].toFixed(1)}`;
-}
-
 // Project all panels into Street View screen space.
 function projectPanels(
   panels: SolarPanel[],
   panelLimit: number,
   insights: InsightsResponse,
   panoPos: google.maps.LatLngLiteral,
-  pov: google.maps.StreetViewPov,
+  pov: Pov,
   vpW: number,
   vpH: number,
+  terrainElevation = 0,
 ): PanelScreenData[] {
   if (!insights.panelWidthMeters || !insights.panelHeightMeters) return [];
 
@@ -108,7 +84,14 @@ function projectPanels(
   const P = (pov.pitch   * Math.PI) / 180;
   const halfFovH = Math.PI / Math.pow(2, (pov.zoom ?? 1) + 1);
   const halfFovV = Math.atan(Math.tan(halfFovH) * (vpH / vpW));
-  const CAM_H = 1.5;
+  // planeHeightAtCenterMeters is MSL elevation; terrainElevation (also MSL) corrects for that.
+  // If elevation API failed (sentinel -1), estimate ground from the lowest roof segment
+  // minus a typical Finnish residential eave height (5 m).
+  const minPlaneH = insights.roofSegmentStats?.length
+    ? Math.min(...insights.roofSegmentStats.map(s => s.planeHeightAtCenterMeters ?? 999))
+    : 999;
+  const effectiveTerrain = terrainElevation >= 0 ? terrainElevation : minPlaneH - 5;
+  const CAM_H = effectiveTerrain + 1.5;
 
   const chosen = [...panels]
     .sort((a, b) => b.yearlyEnergyDcKwh - a.yearlyEnergyDcKwh)
@@ -126,7 +109,22 @@ function projectPanels(
     for (const c of corners) {
       const north = (c.lat - panoPos.lat) * R_EARTH * (Math.PI / 180);
       const east  = (c.lng - panoPos.lng) * R_EARTH * (Math.PI / 180) * Math.cos(panoPos.lat * Math.PI / 180);
-      const up    = pH - CAM_H;
+
+      // Per-corner height: adjust pH by position along the slope
+      let cornerH = pH;
+      if (seg?.center && seg.pitchDegrees != null && seg.azimuthDegrees != null) {
+        const az  = seg.azimuthDegrees * Math.PI / 180;
+        const pit = seg.pitchDegrees   * Math.PI / 180;
+        const cN  = (c.lat - seg.center.latitude)  * R_EARTH * Math.PI / 180;
+        const cE  = (c.lng - seg.center.longitude) * R_EARTH * Math.PI / 180
+          * Math.cos(seg.center.latitude * Math.PI / 180);
+        // downhill projection: positive = toward azimuth direction = lower elevation
+        const downhill = cE * Math.sin(az) + cN * Math.cos(az);
+        const raw = pH - downhill * Math.tan(pit);
+        // Cap correction to ±6 m so stale/wrong segment centres don't fling panels off-screen
+        cornerH = Math.max(pH - 6, Math.min(pH + 6, raw));
+      }
+      const up = cornerH - CAM_H;
       const fwd   =  east * Math.sin(H) * Math.cos(P) + north * Math.cos(H) * Math.cos(P) + up * Math.sin(P);
       const right =  east * Math.cos(H) - north * Math.sin(H);
       const camUp = -east * Math.sin(H) * Math.sin(P) - north * Math.cos(H) * Math.sin(P) + up * Math.cos(P);
@@ -146,71 +144,30 @@ function projectPanels(
   return result;
 }
 
-// Renders one realistic solar panel in SVG space.
+// Renders one solar panel in SVG space.
 function SvPanel({ corners, index }: { corners: PanelScreenData["corners"]; index: number }) {
   const pts   = corners.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
-  const clipId = `sv-pc-${index}`;
   const gradId = `sv-pg-${index}`;
-  const COLS = 6, ROWS = 10;
-
-  const vPaths = Array.from({ length: COLS - 1 }, (_, k) => gridLinePath(corners, (k+1)/COLS, "v")).join(" ");
-  const hPaths = Array.from({ length: ROWS - 1 }, (_, k) => gridLinePath(corners, (k+1)/ROWS, "h")).join(" ");
   const [x1, y1] = corners[0];
   const [x2, y2] = corners[2];
 
   return (
     <g>
       <defs>
-        <clipPath id={clipId}><polygon points={pts} /></clipPath>
         <linearGradient id={gradId} gradientUnits="userSpaceOnUse"
           x1={x1.toFixed(1)} y1={y1.toFixed(1)} x2={x2.toFixed(1)} y2={y2.toFixed(1)}>
           <stop offset="0%"   stopColor="#7ab0e0" stopOpacity="0.18" />
-          <stop offset="40%"  stopColor="#4070a0" stopOpacity="0.06" />
           <stop offset="100%" stopColor="#000820" stopOpacity="0.00" />
         </linearGradient>
       </defs>
       <polygon points={pts} fill="#0c1a28" fillOpacity={0.92} />
-      <g clipPath={`url(#${clipId})`}>
-        <path d={vPaths} stroke="rgba(255,255,255,0.09)" strokeWidth={0.6} fill="none" />
-        <path d={hPaths} stroke="rgba(255,255,255,0.09)" strokeWidth={0.6} fill="none" />
-      </g>
       <polygon points={pts} fill={`url(#${gradId})`} />
       <polygon points={pts} fill="none" stroke="#a8b0b8" strokeWidth={1.4} strokeOpacity={0.85} />
     </g>
   );
 }
 
-// Static composite: Street View Static API image + panel overlay inside a single SVG viewBox.
-// Both image and panels share the same coordinate space, so they scale together on resize.
-function VisualisationPanel({ scene }: { scene: CapturedScene }) {
-  return (
-    <div className="relative flex-1 bg-ink overflow-hidden">
-      <svg
-        viewBox={`0 0 ${scene.width} ${scene.height}`}
-        className="w-full h-full"
-        preserveAspectRatio="xMidYMid slice"
-      >
-        {/* Street View static image as SVG background */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <image
-          href={scene.imageUrl}
-          x={0} y={0}
-          width={scene.width}
-          height={scene.height}
-          preserveAspectRatio="xMidYMid slice"
-        />
-        {/* Panel overlays in the same coordinate space */}
-        {scene.panels.map((p, i) => (
-          <SvPanel key={i} corners={p.corners} index={i + 1000} />
-        ))}
-      </svg>
-      <div className="absolute bottom-4 left-4 bg-paper/95 border border-ink px-4 py-2 mono text-xs">
-        <div className="uppercase tracking-widest text-ash">Visualisation</div>
-        <div className="font-sans">{scene.panels.length} panel{scene.panels.length !== 1 ? "s" : ""} rendered</div>
-      </div>
-    </div>
-  );
-}
+
 
 export function RoofMap({ center, insights, panelLimit }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -221,14 +178,18 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
   const svPanorama = useRef<google.maps.StreetViewPanorama | null>(null);
   const svService = useRef<google.maps.StreetViewService | null>(null);
 
-  // Stores the panorama position + initial heading used to build the static capture
-  const capturedPovRef = useRef<{ pos: google.maps.LatLngLiteral; pov: google.maps.StreetViewPov } | null>(null);
+  // Stores panorama position + terrain elevation (MSL) for panel projection
+  const capturedPovRef = useRef<{ pos: google.maps.LatLngLiteral; pov: Pov; terrainElevation: number } | null>(null);
+  // Tracks the lat/lng for which Gemini was last triggered — prevents re-generation on slider moves
+  const geminiGeneratedFor = useRef<{ lat: number; lng: number } | null>(null);
 
   const [svUnavailable, setSvUnavailable] = useState(false);
   const [svReady, setSvReady]   = useState(false);
   const [panoReady, setPanoReady] = useState(false);
   const [svPanels, setSvPanels] = useState<PanelScreenData[]>([]);
-  const [capturedScene, setCapturedScene] = useState<CapturedScene | null>(null);
+  const [geminiImage, setGeminiImage] = useState<string | null>(null);
+  const [geminiLoading, setGeminiLoading] = useState(false);
+  const [geminiError, setGeminiError] = useState<string | null>(null);
 
   // ── Satellite map ──────────────────────────────────────────────────────────
 
@@ -287,7 +248,6 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
     if (!svService.current || !svPanorama.current) return;
     setSvUnavailable(false);
     setSvPanels([]);
-    setCapturedScene(null);
     setPanoReady(false);
     capturedPovRef.current = null;
 
@@ -300,37 +260,57 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
         }
         const pos = data.location.latLng.toJSON();
         const heading = computeHeading(pos, center);
-        const pov: google.maps.StreetViewPov = { heading, pitch: 5, zoom: 1 };
+        const pov: Pov = { heading, pitch: 0, zoom: 0.5 };
 
         svPanorama.current!.setPosition(pos);
         svPanorama.current!.setPov(pov);
         svPanorama.current!.setVisible(true);
 
-        capturedPovRef.current = { pos, pov };
-        setPanoReady(true);
+        // Fetch terrain elevation so we can convert planeHeightAtCenterMeters
+        // (MSL) into height above the Street View camera.
+        // google.maps.ElevationService is available as soon as any library has loaded.
+        try {
+          new google.maps.ElevationService().getElevationForLocations(
+            { locations: [pos] },
+            (results, status) => {
+              const elev = status === "OK" && results?.[0] ? results[0].elevation : null;
+              capturedPovRef.current = { pos, pov, terrainElevation: elev ?? -1 };
+              setPanoReady(true);
+            },
+          );
+        } catch (e) {
+          console.warn("[RoofMap] ElevationService unavailable:", e);
+          capturedPovRef.current = { pos, pov, terrainElevation: -1 };
+          setPanoReady(true);
+        }
       },
     );
   }, [center]);
 
-  // ── Live Street View panel overlay + static capture ────────────────────────
+  // ── Live Street View panel overlay ────────────────────────────────────────
 
   useEffect(() => {
     if (!svReady || !panoReady || !svPanorama.current || !svRef.current) return;
     if (!insights?.solarPanels || !insights.panelWidthMeters || !insights.panelHeightMeters) {
       setSvPanels([]);
-      setCapturedScene(null);
       return;
     }
 
+    // Snapshot viewport dimensions now — clientWidth transiently returns 0
+    // inside pov_changed callbacks after React re-renders the overlay SVG.
+    const vpW = svRef.current.clientWidth  || 640;
+    const vpH = svRef.current.clientHeight || 360;
+
     // Live overlay: reproject on every camera move
     const reproject = () => {
-      if (!svPanorama.current || !svRef.current) return;
+      if (!svPanorama.current || !capturedPovRef.current) return;
       const pos = svPanorama.current.getPosition();
       if (!pos) return;
       setSvPanels(projectPanels(
         insights.solarPanels!, panelLimit, insights,
-        pos.toJSON(), svPanorama.current.getPov(),
-        svRef.current.clientWidth, svRef.current.clientHeight,
+        pos.toJSON(), svPanorama.current.getPov() as Pov,
+        vpW, vpH,
+        capturedPovRef.current.terrainElevation,
       ));
     };
 
@@ -340,28 +320,54 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
     ];
     reproject();
 
-    // Static capture: fixed dimensions within Street View Static API 640px limit
-    if (capturedPovRef.current) {
-      const { pos, pov } = capturedPovRef.current;
-      const CAPTURE_W = 600;
-      const CAPTURE_H = 338;
-      const rawFov = 180 / Math.pow(2, pov.zoom ?? 1);
-      const fov = Math.max(10, Math.min(120, rawFov));
-      const heading = ((pov.heading % 360) + 360) % 360;
-      const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
-      const imageUrl = `https://maps.googleapis.com/maps/api/streetview`
-        + `?size=${CAPTURE_W}x${CAPTURE_H}`
-        + `&location=${pos.lat},${pos.lng}`
-        + `&heading=${heading.toFixed(2)}`
-        + `&pitch=${(pov.pitch ?? 0).toFixed(2)}`
-        + `&fov=${fov}`
-        + `&key=${key}`;
-      const panels = projectPanels(insights.solarPanels!, panelLimit, insights, pos, pov, CAPTURE_W, CAPTURE_H);
-      setCapturedScene({ imageUrl, panels, width: CAPTURE_W, height: CAPTURE_H });
-    }
-
     return () => { listeners.forEach((l) => google.maps.event.removeListener(l)); };
   }, [svReady, panoReady, center, insights, panelLimit]);
+
+  // ── Gemini AI solar visualisation ─────────────────────────────────────────
+
+  useEffect(() => {
+    // center prop is a new object on every parent render (slider moves etc.) —
+    // compare lat/lng values so we only generate once per actual address change.
+    const alreadyGenerated =
+      geminiGeneratedFor.current?.lat === center.lat &&
+      geminiGeneratedFor.current?.lng === center.lng;
+    if (alreadyGenerated) return;
+
+    // New address — reset state
+    setGeminiImage(null);
+    setGeminiError(null);
+
+    if (!panoReady || svUnavailable || !capturedPovRef.current) return;
+
+    // Mark this address as in-progress so subsequent effect firings skip it
+    geminiGeneratedFor.current = { lat: center.lat, lng: center.lng };
+
+    const { pos, pov } = capturedPovRef.current;
+    const heading = ((pov.heading % 360) + 360) % 360;
+    const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
+    const imageUrl =
+      `https://maps.googleapis.com/maps/api/streetview` +
+      `?size=640x360&location=${pos.lat},${pos.lng}` +
+      `&heading=${heading.toFixed(2)}&pitch=0&fov=120&key=${key}`;
+
+    setGeminiLoading(true);
+
+    fetch("/api/solar-viz", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imageUrl }),
+    })
+      .then(async (r) => {
+        const json = await r.json();
+        if (!r.ok) throw new Error(json.error ?? `HTTP ${r.status}`);
+        return json as { imageData?: string; mimeType?: string };
+      })
+      .then(({ imageData, mimeType }) => {
+        if (imageData) setGeminiImage(`data:${mimeType ?? "image/png"};base64,${imageData}`);
+      })
+      .catch((e: Error) => setGeminiError(e.message))
+      .finally(() => setGeminiLoading(false));
+  }, [panoReady, svUnavailable, center]);
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
@@ -392,17 +398,35 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
         )}
       </div>
 
-      {/* 3 — Static composite: Street View Static API image + panels in one SVG */}
-      {capturedScene
-        ? <VisualisationPanel scene={capturedScene} />
-        : (
-          <div className="relative flex-1 bg-ink grid place-items-center">
-            <p className="text-xs uppercase tracking-widest text-ash">
-              {svUnavailable ? "No street-level imagery" : "Loading visualisation…"}
-            </p>
+      {/* 3 — Gemini AI solar visualisation */}
+      {!svUnavailable && (
+        <div className="relative flex-1 bg-ink overflow-hidden">
+          {geminiImage ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={geminiImage} alt="AI solar visualisation" className="w-full h-full object-cover" />
+          ) : (
+            <div className="absolute inset-0 grid place-items-center text-paper">
+              <div className="text-center space-y-3 px-6">
+                {geminiLoading && (
+                  <div className="w-6 h-6 border-2 border-paper/30 border-t-paper rounded-full animate-spin mx-auto" />
+                )}
+                <p className="text-xs uppercase tracking-widest">
+                  {geminiError
+                    ? geminiError
+                    : geminiLoading
+                    ? "Generating AI visualisation…"
+                    : "Waiting for Street View…"}
+                </p>
+              </div>
+            </div>
+          )}
+          <div className="absolute bottom-4 left-4 bg-paper/95 border border-ink/20 px-4 py-2 mono text-xs">
+            <div className="uppercase tracking-widest text-ash">AI Visualisation</div>
+            <div className="font-sans text-ash">Gemini · solar panels</div>
           </div>
-        )
-      }
+        </div>
+      )}
+
     </div>
   );
 }
