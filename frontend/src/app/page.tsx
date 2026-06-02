@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { AddressAutocomplete } from "@/components/AddressAutocomplete";
+import { AdBanner } from "@/components/AdBanner";
 import { Configurator } from "@/components/Configurator";
-import { LeadForm } from "@/components/LeadForm";
 import { RoofMap } from "@/components/RoofMap";
 import { api, ApiError, FinanceResponse, InsightsResponse } from "@/lib/api";
 
@@ -134,16 +134,9 @@ export default function Home() {
             />
           )}
 
-          {insights && finance && (
+          {insights && (
             <div className="mt-10 pt-8 border-t-2 border-ink">
-              <LeadForm
-                address={selection.address}
-                lat={selection.lat}
-                lng={selection.lng}
-                system_kwp={finance.system_kwp}
-                annual_kwh={finance.annual_kwh_year_one}
-                estimated_cost_eur={finance.finance.capex_eur}
-              />
+              <AdBanner slot="4853670761" format="auto" />
             </div>
           )}
 

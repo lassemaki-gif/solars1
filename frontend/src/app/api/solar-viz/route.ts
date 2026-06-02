@@ -11,6 +11,17 @@ export async function POST(req: NextRequest) {
 
     const { imageUrl } = (await req.json()) as { imageUrl: string };
 
+    // Only allow Google Maps Street View Static API URLs
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(imageUrl);
+    } catch {
+      return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
+    }
+    if (parsedUrl.hostname !== "maps.googleapis.com" || !parsedUrl.pathname.startsWith("/maps/api/streetview")) {
+      return NextResponse.json({ error: "URL not allowed" }, { status: 400 });
+    }
+
     // Fetch the Street View Static image server-side
     const imgRes = await fetch(imageUrl);
     if (!imgRes.ok) {

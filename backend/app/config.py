@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     # "https://solars.solutions,https://www.solars.solutions,http://localhost:3000"
     frontend_origins: str = "http://localhost:3000"
     database_url: str = "sqlite+aiosqlite:///./solarscope.db"
+    # Secret token required to access GET /api/leads — set via LEADS_SECRET env var
+    leads_secret: str = ""
 
     @property
     def allowed_origins(self) -> list[str]:

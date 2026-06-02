@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 
@@ -128,8 +128,9 @@ async def create_lead(body: LeadRequest) -> LeadResponse:
 
 
 @app.get("/api/leads")
-async def list_leads() -> list[dict]:
-    """Admin endpoint — protect this behind auth before deploying."""
+async def list_leads(x_leads_secret: str | None = Header(default=None)) -> list[dict]:
+    if not settings.leads_secret or x_leads_secret != settings.leads_secret:
+        raise HTTPException(status_code=401, detail="Unauthorized")
     async with async_session() as session:
         rows = (await session.execute(select(Lead).order_by(Lead.created_at.desc()))).scalars().all()
         return [
