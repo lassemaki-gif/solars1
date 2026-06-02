@@ -6,8 +6,14 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     google_maps_api_key: str = ""
-    frontend_origin: str = "http://localhost:3000"
+    # Comma-separated list of allowed CORS origins, e.g.
+    # "https://solars.solutions,https://www.solars.solutions,http://localhost:3000"
+    frontend_origins: str = "http://localhost:3000"
     database_url: str = "sqlite+aiosqlite:///./solarscope.db"
+
+    @property
+    def allowed_origins(self) -> list[str]:
+        return [o.strip() for o in self.frontend_origins.split(",") if o.strip()]
 
     # Nordic financial model defaults
     default_electricity_price_eur_per_kwh: float = 0.18
