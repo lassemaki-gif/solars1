@@ -123,6 +123,12 @@ export default function Home() {
             <p className="font-display text-xl leading-tight">{selection.address}</p>
           </div>
 
+          {loadingInsights && (
+            <p className="text-ash italic text-sm">Scanning roof data…</p>
+          )}
+          {error && !loadingInsights && (
+            <p className="text-red-600 text-sm font-mono mt-2">{error}</p>
+          )}
           {insights && (
             <Configurator
               insights={insights}
