@@ -7,6 +7,7 @@ interface Props {
   insights: InsightsResponse;
   finance: FinanceResponse | null;
   loadingFinance: boolean;
+  financeError?: string | null;
   targetPanels: number;
   onChange: (params: {
     targetPanels: number;
@@ -17,7 +18,7 @@ interface Props {
   }) => void;
 }
 
-export function Configurator({ insights, finance, loadingFinance, targetPanels, onChange }: Props) {
+export function Configurator({ insights, finance, loadingFinance, financeError, targetPanels, onChange }: Props) {
   const max = insights.maxArrayPanelsCount ?? 1;
   const panelW = insights.panelCapacityWatts ?? 400;
 
@@ -111,7 +112,9 @@ export function Configurator({ insights, finance, loadingFinance, targetPanels, 
 
       {/* Results */}
       <div className="border-t border-ink/20 pt-6 space-y-5">
-        {loadingFinance && !finance ? (
+        {financeError ? (
+          <p className="text-red-600 text-sm font-mono">{financeError}</p>
+        ) : loadingFinance && !finance ? (
           <p className="text-ash italic">Calculating…</p>
         ) : finance ? (
           <>

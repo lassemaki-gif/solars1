@@ -26,6 +26,7 @@ export default function Home() {
   });
   const [loadingInsights, setLoadingInsights] = useState(false);
   const [loadingFinance, setLoadingFinance] = useState(false);
+  const [financeError, setFinanceError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Fetch insights when an address is picked
@@ -57,6 +58,7 @@ export default function Home() {
     const panelW = insights.panelCapacityWatts ?? 400;
     const target_kwp = (targetPanels * panelW) / 1000;
     setLoadingFinance(true);
+    setFinanceError(null);
     const id = setTimeout(() => {
       api
         .finance({
@@ -65,8 +67,8 @@ export default function Home() {
           target_kwp,
           ...financeParams,
         })
-        .then(setFinance)
-        .catch(() => {})
+        .then((data) => { setFinance(data); setFinanceError(null); })
+        .catch((err) => setFinanceError(err instanceof Error ? err.message : String(err)))
         .finally(() => setLoadingFinance(false));
     }, 250); // debounce slider drags
     return () => clearTimeout(id);
@@ -126,6 +128,7 @@ export default function Home() {
               insights={insights}
               finance={finance}
               loadingFinance={loadingFinance}
+              financeError={financeError}
               targetPanels={targetPanels}
               onChange={({ targetPanels: tp, ...rest }) => {
                 setTargetPanels(tp);
@@ -282,10 +285,11 @@ function SunArc() {
         const a = (deg * Math.PI) / 180;
         const inner = 330;
         const outer = 346;
-        const x1 = 350 + inner * Math.cos(a);
-        const y1 = 200 + inner * Math.sin(a);
-        const x2 = 350 + outer * Math.cos(a);
-        const y2 = 200 + outer * Math.sin(a);
+        const r = (n: number) => Math.round(n * 1000) / 1000;
+        const x1 = r(350 + inner * Math.cos(a));
+        const y1 = r(200 + inner * Math.sin(a));
+        const x2 = r(350 + outer * Math.cos(a));
+        const y2 = r(200 + outer * Math.sin(a));
         return <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#1a1a1a" strokeWidth="1" />;
       })}
 
