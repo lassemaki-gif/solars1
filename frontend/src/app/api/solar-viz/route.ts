@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.5-flash-image",
       contents: [
         {
           role: "user",
@@ -61,7 +61,9 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ error: "Gemini returned no image" }, { status: 500 });
+    const textPart = parts.find((p) => p.text)?.text ?? "";
+    console.error("[solar-viz] no image part. text:", textPart);
+    return NextResponse.json({ error: `Gemini returned no image${textPart ? ": " + textPart : ""}` }, { status: 500 });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     console.error("[solar-viz]", msg);
