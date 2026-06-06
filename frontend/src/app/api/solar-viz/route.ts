@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-flash-image",
+      model: "gemini-2.5-flash-image",
       contents: [
         {
           role: "user",
