@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "SoLars — see the sun on your roof",
-  description: "Instant solar estimates for Nordic homes.",
+  description: "Instant solar estimates for European homes.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
