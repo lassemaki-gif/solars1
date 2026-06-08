@@ -1533,8 +1533,8 @@ export const noMarket: MarketConfig = {
   solarDeclination: "SOLFALLSDEKLINASJON · 60°N",
   currencySymbol: "kr",
   defaults: {
-    electricityPrice: 1.50,
-    feedInPrice: 0.30,
+    electricityPrice: 2.10,
+    feedInPrice: 0.55,
     installCostPerKwp: 12000,
     selfConsumptionRatio: 0.50,
   },
