@@ -814,7 +814,7 @@ export const gbMarket: MarketConfig = {
   locale: "en-GB",
   t: {
     kicker: "№ 01 — A new map of the sun",
-    headline1: "See the sun",
+    headline1: "See the amount of the sun",
     headline2: "on your roof.",
     body: "Type a UK address. We'll measure your roof from satellite, place panels where they earn the most, and tell you what they'll save you in twenty-five years.",
     pressEnter: "Press ↵ after selecting from the suggestions",
@@ -1058,7 +1058,7 @@ export const ieMarket: MarketConfig = {
   locale: "en-IE",
   t: {
     kicker: "№ 01 — A new map of the sun",
-    headline1: "See the sun",
+    headline1: "See the amount of the sun",
     headline2: "on your roof.",
     body: "Type an Irish address. We'll measure your roof from satellite, place panels where they earn the most, and tell you what they'll save you in twenty-five years.",
     pressEnter: "Press ↵ after selecting from the suggestions",
@@ -1424,7 +1424,7 @@ export const mtMarket: MarketConfig = {
   locale: "en-MT",
   t: {
     kicker: "№ 01 — Your solar map",
-    headline1: "See the sun",
+    headline1: "See the amount of the sun",
     headline2: "on your roof.",
     body: "Enter a Maltese address. We'll measure your roof from satellite, place panels where they earn the most, and show you your savings over twenty-five years.",
     pressEnter: "Press ↵ after selecting from the suggestions",
