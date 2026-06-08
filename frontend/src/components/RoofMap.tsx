@@ -375,12 +375,27 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
   function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = reader.result as string;
-      // dataUrl is "data:<mimeType>;base64,<data>"
-      const [header, imageData] = dataUrl.split(",");
-      const mimeType = header.split(":")[1].split(";")[0];
+    e.target.value = "";
+
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+
+      // Resize to max 1280×960 to stay well under Vercel's 4.5 MB body limit
+      const MAX_W = 1280, MAX_H = 960;
+      const scale = Math.min(1, MAX_W / img.width, MAX_H / img.height);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d")!.drawImage(img, 0, 0, w, h);
+
+      const mimeType = "image/jpeg";
+      const imageData = canvas.toDataURL(mimeType, 0.85).split(",")[1];
+
       setGeminiImage(null);
       setGeminiError(null);
       setGeminiLoading(true);
@@ -390,9 +405,11 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
         body: JSON.stringify({ imageData, mimeType }),
       })
         .then(async (r) => {
-          const json = await r.json();
+          const text = await r.text();
+          let json: { imageData?: string; mimeType?: string; error?: string };
+          try { json = JSON.parse(text); } catch { throw new Error(text.slice(0, 120)); }
           if (!r.ok) throw new Error(json.error ?? `HTTP ${r.status}`);
-          return json as { imageData?: string; mimeType?: string };
+          return json;
         })
         .then(({ imageData: result, mimeType: resultMime }) => {
           if (result) setGeminiImage(`data:${resultMime ?? "image/png"};base64,${result}`);
@@ -400,9 +417,7 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
         .catch((err: Error) => setGeminiError(err.message))
         .finally(() => setGeminiLoading(false));
     };
-    reader.readAsDataURL(file);
-    // Reset so the same file can be re-uploaded if needed
-    e.target.value = "";
+    img.src = objectUrl;
   }
 
   // ── Render ─────────────────────────────────────────────────────────────────
