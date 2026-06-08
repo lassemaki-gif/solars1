@@ -196,7 +196,12 @@ function Landing({ config, onPick }: { config: MarketConfig; onPick: (s: Selecti
     <main className="min-h-screen flex flex-col">
       <header className="flex items-center justify-between px-8 lg:px-12 py-6">
         <span className="font-display text-2xl tracking-tight">SoLars<span className="text-sun">.</span></span>
-        <span className="text-xs uppercase tracking-widest text-ash">{config.cities}</span>
+        <div className="flex items-center gap-6">
+          <span className="text-xs uppercase tracking-widest text-ash hidden sm:block">{config.cities}</span>
+          <Link href="/?all" className="text-xs uppercase tracking-widest text-ink/60 hover:text-ink border border-ink/20 hover:border-ink/50 px-3 py-1.5 transition-colors">
+            All markets
+          </Link>
+        </div>
       </header>
 
       <div className="flex-1 grid lg:grid-cols-12 gap-8 px-8 lg:px-12 pb-16">
