@@ -10,12 +10,12 @@ class InsightsRequest(BaseModel):
 
 
 class FinanceRequest(BaseModel):
-    lat: float
-    lng: float
+    lat: float = Field(..., ge=-90, le=90)
+    lng: float = Field(..., ge=-180, le=180)
     target_kwp: Optional[float] = Field(None, ge=0, le=100)
     electricity_price: Optional[float] = Field(None, ge=0, le=2)
     feed_in_price: Optional[float] = Field(None, ge=0, le=2)
-    install_cost_per_kwp: Optional[float] = Field(None, ge=0, le=10000)
+    install_cost_per_kwp: Optional[float] = Field(None, ge=0, le=150000)
     self_consumption_ratio: Optional[float] = Field(None, ge=0, le=1)
 
 
