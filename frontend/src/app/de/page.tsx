@@ -1,6 +1,6 @@
 import { SolarsApp } from "@/components/SolarsApp";
-import { itMarket } from "@/lib/market";
+import { deMarket } from "@/lib/market";
 
 export default function Home() {
-  return <SolarsApp config={itMarket} />;
+  return <SolarsApp config={deMarket} />;
 }

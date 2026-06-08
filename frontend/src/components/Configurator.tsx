@@ -79,27 +79,27 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
             label={t.electricityPrice}
             unit={`${currencySymbol}/kWh`}
             value={elec}
-            step={0.01}
-            min={0.05}
-            max={0.6}
+            step={market.ranges.electricityPrice.step}
+            min={market.ranges.electricityPrice.min}
+            max={market.ranges.electricityPrice.max}
             onChange={(v) => { setElec(v); emit({ elec: v }); }}
           />
           <Field
             label={t.feedInPrice}
             unit={`${currencySymbol}/kWh`}
             value={fit}
-            step={0.01}
-            min={0}
-            max={0.3}
+            step={market.ranges.feedInPrice.step}
+            min={market.ranges.feedInPrice.min}
+            max={market.ranges.feedInPrice.max}
             onChange={(v) => { setFit(v); emit({ fit: v }); }}
           />
           <Field
             label={t.installCost}
             unit={`${currencySymbol}/kWp`}
             value={capex}
-            step={50}
-            min={400}
-            max={2500}
+            step={market.ranges.installCostPerKwp.step}
+            min={market.ranges.installCostPerKwp.min}
+            max={market.ranges.installCostPerKwp.max}
             onChange={(v) => { setCapex(v); emit({ capex: v }); }}
           />
           <Field
