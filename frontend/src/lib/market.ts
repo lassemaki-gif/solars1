@@ -114,7 +114,7 @@ export const dachMarket: MarketConfig = {
   placeholder: "Musterstraße 1, Berlin…",
   solarDeclination: "SOLARE DEKLINATION · 48°N",
   defaults: {
-    electricityPrice: 0.30,
+    electricityPrice: 0.39,
     feedInPrice: 0.08,
     installCostPerKwp: 1000,
     selfConsumptionRatio: 0.30,
