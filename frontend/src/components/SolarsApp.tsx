@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { AddressAutocomplete } from "@/components/AddressAutocomplete";
 import { AdBanner } from "@/components/AdBanner";
 import { Configurator } from "@/components/Configurator";
@@ -160,7 +161,12 @@ function Header({ config, onReset }: { config: MarketConfig; onReset: () => void
       <button onClick={onReset} className="font-display text-2xl tracking-tight">
         SoLars<span className="text-sun">.</span>
       </button>
-      <span className="text-xs uppercase tracking-widest text-ash">{config.edition}</span>
+      <div className="flex items-center gap-6">
+        <span className="text-xs uppercase tracking-widest text-ash hidden sm:block">{config.edition}</span>
+        <Link href="/?all" className="text-xs uppercase tracking-widest text-ash hover:text-ink transition-colors">
+          All markets
+        </Link>
+      </div>
     </header>
   );
 }

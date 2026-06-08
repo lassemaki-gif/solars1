@@ -12,6 +12,10 @@ const countryRoutes: Record<string, string> = {
 };
 
 export function middleware(request: NextRequest) {
+  if (request.nextUrl.searchParams.has("all")) {
+    return NextResponse.next();
+  }
+
   const country =
     request.headers.get("cf-ipcountry") ??
     request.headers.get("x-vercel-ip-country");
