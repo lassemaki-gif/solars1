@@ -679,8 +679,8 @@ export const fiMarket: MarketConfig = {
   solarDeclination: "AURINGON DEKLINAATIO · 62°N",
   currencySymbol: "€",
   defaults: {
-    electricityPrice: 0.17,
-    feedInPrice: 0.04,
+    electricityPrice: 0.18,
+    feedInPrice: 0.05,
     installCostPerKwp: 1000,
     selfConsumptionRatio: 0.50,
   },
