@@ -9,27 +9,36 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "GEMINI_API_KEY not configured" }, { status: 500 });
     }
 
-    const { imageUrl } = (await req.json()) as { imageUrl: string };
+    const body = (await req.json()) as { imageUrl?: string; imageData?: string; mimeType?: string };
 
-    // Only allow Google Maps Street View Static API URLs
-    let parsedUrl: URL;
-    try {
-      parsedUrl = new URL(imageUrl);
-    } catch {
-      return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
-    }
-    if (parsedUrl.hostname !== "maps.googleapis.com" || !parsedUrl.pathname.startsWith("/maps/api/streetview")) {
-      return NextResponse.json({ error: "URL not allowed" }, { status: 400 });
-    }
+    let base64: string;
+    let mimeType: string;
 
-    // Fetch the Street View Static image server-side
-    const imgRes = await fetch(imageUrl);
-    if (!imgRes.ok) {
-      return NextResponse.json({ error: `Street view fetch failed: ${imgRes.status}` }, { status: 502 });
+    if (body.imageData && body.mimeType) {
+      // User-uploaded image: base64 data sent directly from the browser
+      base64 = body.imageData;
+      mimeType = body.mimeType;
+    } else if (body.imageUrl) {
+      // Street View Static URL: validate and fetch server-side
+      let parsedUrl: URL;
+      try {
+        parsedUrl = new URL(body.imageUrl);
+      } catch {
+        return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
+      }
+      if (parsedUrl.hostname !== "maps.googleapis.com" || !parsedUrl.pathname.startsWith("/maps/api/streetview")) {
+        return NextResponse.json({ error: "URL not allowed" }, { status: 400 });
+      }
+      const imgRes = await fetch(body.imageUrl);
+      if (!imgRes.ok) {
+        return NextResponse.json({ error: `Street view fetch failed: ${imgRes.status}` }, { status: 502 });
+      }
+      const imgBuffer = await imgRes.arrayBuffer();
+      base64 = Buffer.from(imgBuffer).toString("base64");
+      mimeType = (imgRes.headers.get("content-type") ?? "image/jpeg").split(";")[0];
+    } else {
+      return NextResponse.json({ error: "imageUrl or imageData+mimeType required" }, { status: 400 });
     }
-    const imgBuffer = await imgRes.arrayBuffer();
-    const base64 = Buffer.from(imgBuffer).toString("base64");
-    const mimeType = (imgRes.headers.get("content-type") ?? "image/jpeg").split(";")[0];
 
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 

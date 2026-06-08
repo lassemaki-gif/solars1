@@ -39,8 +39,8 @@ h1, h2, h3, .display {
 }
 
 /* Hide Google Places "powered by" outline glow we don't want */
-.pac-container { font-family: 'Inter Tight', system-ui, sans-serif; border-radius: 0; border: 1px solid var(--ink); margin-top: 4px; box-shadow: none; }
-.pac-item { padding: 10px 14px; border-top: 1px solid #e8e3d8; }
+.pac-container { font-family: 'Inter Tight', system-ui, sans-serif; border-radius: 0; border: 1px solid var(--ink); margin-top: 4px; box-shadow: none; z-index: 9999 !important; pointer-events: auto !important; }
+.pac-item { padding: 10px 14px; border-top: 1px solid #e8e3d8; cursor: pointer; }
 .pac-item:first-child { border-top: none; }
 
 /* Map container — strip the default Google chrome borders */

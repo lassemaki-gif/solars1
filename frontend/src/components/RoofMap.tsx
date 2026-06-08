@@ -190,6 +190,7 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
   const [geminiImage, setGeminiImage] = useState<string | null>(null);
   const [geminiLoading, setGeminiLoading] = useState(false);
   const [geminiError, setGeminiError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // ── Satellite map ──────────────────────────────────────────────────────────
 
@@ -369,6 +370,41 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
       .finally(() => setGeminiLoading(false));
   }, [panoReady, svUnavailable, center]);
 
+  // ── User photo upload ─────────────────────────────────────────────────────
+
+  function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      // dataUrl is "data:<mimeType>;base64,<data>"
+      const [header, imageData] = dataUrl.split(",");
+      const mimeType = header.split(":")[1].split(";")[0];
+      setGeminiImage(null);
+      setGeminiError(null);
+      setGeminiLoading(true);
+      fetch("/api/solar-viz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageData, mimeType }),
+      })
+        .then(async (r) => {
+          const json = await r.json();
+          if (!r.ok) throw new Error(json.error ?? `HTTP ${r.status}`);
+          return json as { imageData?: string; mimeType?: string };
+        })
+        .then(({ imageData: result, mimeType: resultMime }) => {
+          if (result) setGeminiImage(`data:${resultMime ?? "image/png"};base64,${result}`);
+        })
+        .catch((err: Error) => setGeminiError(err.message))
+        .finally(() => setGeminiLoading(false));
+    };
+    reader.readAsDataURL(file);
+    // Reset so the same file can be re-uploaded if needed
+    e.target.value = "";
+  }
+
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
@@ -399,33 +435,53 @@ export function RoofMap({ center, insights, panelLimit }: Props) {
       </div>
 
       {/* 3 — Gemini AI solar visualisation */}
-      {!svUnavailable && (
-        <div className="relative flex-1 bg-ink overflow-hidden">
-          {geminiImage ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={geminiImage} alt="AI solar visualisation" className="w-full h-full object-cover" />
-          ) : (
-            <div className="absolute inset-0 grid place-items-center text-paper">
-              <div className="text-center space-y-3 px-6">
-                {geminiLoading && (
-                  <div className="w-6 h-6 border-2 border-paper/30 border-t-paper rounded-full animate-spin mx-auto" />
-                )}
-                <p className="text-xs uppercase tracking-widest">
-                  {geminiError
-                    ? geminiError
-                    : geminiLoading
-                    ? "Generating AI visualisation…"
-                    : "Waiting for Street View…"}
-                </p>
-              </div>
+      <div className="relative flex-1 bg-ink overflow-hidden">
+        {geminiImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={geminiImage} alt="AI solar visualisation" className="w-full h-full object-cover" />
+        ) : (
+          <div className="absolute inset-0 grid place-items-center text-paper">
+            <div className="text-center space-y-3 px-6">
+              {geminiLoading && (
+                <div className="w-6 h-6 border-2 border-paper/30 border-t-paper rounded-full animate-spin mx-auto" />
+              )}
+              <p className="text-xs uppercase tracking-widest">
+                {geminiError
+                  ? geminiError
+                  : geminiLoading
+                  ? "Generating AI visualisation…"
+                  : svUnavailable
+                  ? "Upload a photo to visualise solar panels"
+                  : "Waiting for Street View…"}
+              </p>
             </div>
-          )}
-          <div className="absolute bottom-4 left-4 bg-paper/95 border border-ink/20 px-4 py-2 mono text-xs">
-            <div className="uppercase tracking-widest text-ash">AI Visualisation</div>
-            <div className="font-sans text-ash">Gemini · solar panels</div>
           </div>
+        )}
+
+        {/* Upload button — always visible in top-right corner */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleUpload}
+        />
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          disabled={geminiLoading}
+          className="absolute top-3 right-3 flex items-center gap-1.5 bg-paper/90 hover:bg-paper border border-ink/20 px-3 py-1.5 text-ink text-xs font-mono uppercase tracking-widest transition-colors disabled:opacity-50"
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M6 1v7M3 4l3-3 3 3M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9" />
+          </svg>
+          Upload photo
+        </button>
+
+        <div className="absolute bottom-4 left-4 bg-paper/95 border border-ink/20 px-4 py-2 mono text-xs">
+          <div className="uppercase tracking-widest text-ash">AI Visualisation</div>
+          <div className="font-sans text-ash">Gemini · solar panels</div>
         </div>
-      )}
+      </div>
 
     </div>
   );
