@@ -41,7 +41,7 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
 
   const sysKwp = (targetPanels * panelW) / 1000;
 
-  const { t, locale } = market;
+  const { t, locale, currencySymbol } = market;
 
   return (
     <div className="space-y-8">
@@ -77,7 +77,7 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
         <div className="grid grid-cols-2 gap-6 mt-6">
           <Field
             label={t.electricityPrice}
-            unit="€/kWh"
+            unit={`${currencySymbol}/kWh`}
             value={elec}
             step={0.01}
             min={0.05}
@@ -86,7 +86,7 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
           />
           <Field
             label={t.feedInPrice}
-            unit="€/kWh"
+            unit={`${currencySymbol}/kWh`}
             value={fit}
             step={0.01}
             min={0}
@@ -95,7 +95,7 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
           />
           <Field
             label={t.installCost}
-            unit="€/kWp"
+            unit={`${currencySymbol}/kWp`}
             value={capex}
             step={50}
             min={400}
@@ -125,11 +125,11 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
             <Stat label={t.annualProduction} value={finance.annual_kwh_year_one.toLocaleString(locale)} unit={t.kwhPerYear} />
             <Stat
               label={t.yearOneSavings}
-              value={`€${finance.finance.annual_savings_year_one_eur.toLocaleString(locale, { maximumFractionDigits: 0 })}`}
+              value={`${currencySymbol}${finance.finance.annual_savings_year_one_eur.toLocaleString(locale, { maximumFractionDigits: 0 })}`}
             />
             <Stat
               label={t.systemCost}
-              value={`€${finance.finance.capex_eur.toLocaleString(locale, { maximumFractionDigits: 0 })}`}
+              value={`${currencySymbol}${finance.finance.capex_eur.toLocaleString(locale, { maximumFractionDigits: 0 })}`}
             />
             <Stat
               label={t.payback}
@@ -138,7 +138,7 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
             />
             <Stat
               label={t.lifetimeGain}
-              value={`€${finance.finance.lifetime_savings_eur.toLocaleString(locale, { maximumFractionDigits: 0 })}`}
+              value={`${currencySymbol}${finance.finance.lifetime_savings_eur.toLocaleString(locale, { maximumFractionDigits: 0 })}`}
             />
             <Stat
               label={t.co2Offset}

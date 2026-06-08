@@ -5,6 +5,7 @@ export interface MarketConfig {
   cities: string;
   placeholder: string;
   solarDeclination: string;
+  currencySymbol: string;
   defaults: {
     electricityPrice: number;
     feedInPrice: number;
@@ -59,6 +60,7 @@ export const nordicMarket: MarketConfig = {
   cities: "Helsinki · Stockholm · Oslo · København",
   placeholder: "Mannerheimintie 1, Helsinki…",
   solarDeclination: "SOLAR DECLINATION · 60°N",
+  currencySymbol: "€",
   defaults: {
     electricityPrice: 0.18,
     feedInPrice: 0.05,
@@ -113,6 +115,7 @@ export const dachMarket: MarketConfig = {
   cities: "Berlin · Wien · Zürich · München",
   placeholder: "Musterstraße 1, Berlin…",
   solarDeclination: "SOLARE DEKLINATION · 48°N",
+  currencySymbol: "€",
   defaults: {
     electricityPrice: 0.39,
     feedInPrice: 0.08,
@@ -157,5 +160,60 @@ export const dachMarket: MarketConfig = {
     over25yr: "> 25 J.",
     lifetimeGain: "25-Jahre-Ertrag",
     co2Offset: "CO₂-Einsparung/Jahr",
+  },
+};
+
+export const ukMarket: MarketConfig = {
+  id: "uk",
+  countries: ["gb"],
+  edition: "UK edition",
+  cities: "London · Manchester · Edinburgh · Bristol",
+  placeholder: "1 Baker Street, London…",
+  solarDeclination: "SOLAR DECLINATION · 52°N",
+  currencySymbol: "£",
+  defaults: {
+    electricityPrice: 0.26,
+    feedInPrice: 0.05,
+    installCostPerKwp: 1000,
+    selfConsumptionRatio: 0.50,
+  },
+  locale: "en-GB",
+  t: {
+    kicker: "№ 01 — A new map of the sun",
+    headline1: "See the sun",
+    headline2: "on your roof.",
+    body: "Type a UK address. We'll measure your roof from satellite, place panels where they earn the most, and tell you what they'll save you in twenty-five years.",
+    pressEnter: "Press ↵ after selecting from the suggestions",
+    trust1title: "Satellite-measured",
+    trust1body: "Roof area, pitch, azimuth and shading from Google Solar API.",
+    trust2title: "UK economics",
+    trust2body: "Current tariffs, SEG export rates, and install costs for the UK.",
+    trust3title: "MCS-certified installers",
+    trust3body: "Quotes come from MCS-certified UK installers, not call centres.",
+    property: "Property",
+    scanningRoof: "Scanning roof data…",
+    noData: "No data available.",
+    noCoverage: "This address isn't covered by satellite solar data yet. Try a nearby town or a different street.",
+    tryAnother: "Try another address",
+    disclaimer: "Estimates are based on Google Solar API satellite modelling and typical UK tariffs. An MCS-certified installer will provide a binding quote after a site survey.",
+    systemSize: "System size",
+    panel: "panel",
+    panels: "panels",
+    max: "max",
+    adjustAssumptions: "Adjust assumptions",
+    electricityPrice: "Electricity price",
+    feedInPrice: "SEG export rate",
+    installCost: "Install cost",
+    selfConsumption: "Self-consumption",
+    calculating: "Calculating…",
+    annualProduction: "Annual production",
+    kwhPerYear: "kWh / yr",
+    yearOneSavings: "Year-one savings",
+    systemCost: "System cost",
+    payback: "Payback",
+    years: "years",
+    over25yr: "> 25 yr",
+    lifetimeGain: "25-year net gain",
+    co2Offset: "CO₂ offset / yr",
   },
 };
