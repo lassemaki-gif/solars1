@@ -163,7 +163,7 @@ function Header({ config, onReset }: { config: MarketConfig; onReset: () => void
       </button>
       <div className="flex items-center gap-6">
         <span className="text-xs uppercase tracking-widest text-ash hidden sm:block">{config.edition}</span>
-        <Link href="/?all" className="text-xs uppercase tracking-widest text-ash hover:text-ink transition-colors">
+        <Link href="/?all" className="text-xs uppercase tracking-widest text-ink/60 hover:text-ink border border-ink/20 hover:border-ink/50 px-3 py-1.5 transition-colors">
           All markets
         </Link>
       </div>
