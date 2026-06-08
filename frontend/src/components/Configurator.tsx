@@ -107,7 +107,7 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
             unit="%"
             value={scr * 100}
             step={5}
-            min={20}
+            min={50}
             max={90}
             onChange={(v) => { setScr(v / 100); emit({ scr: v / 100 }); }}
           />

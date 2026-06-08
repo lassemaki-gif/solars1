@@ -72,7 +72,7 @@ export const atMarket: MarketConfig = {
     electricityPrice: 0.27,
     feedInPrice: 0.06,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.40,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -133,7 +133,7 @@ export const beMarket: MarketConfig = {
     electricityPrice: 0.29,
     feedInPrice: 0.05,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.35,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -194,7 +194,7 @@ export const bgMarket: MarketConfig = {
     electricityPrice: 0.14,
     feedInPrice: 0.04,
     installCostPerKwp: 2000,
-    selfConsumptionRatio: 0.45,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.50, step: 0.01 },
@@ -255,7 +255,7 @@ export const chMarket: MarketConfig = {
     electricityPrice: 0.27,
     feedInPrice: 0.06,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.35,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.10, max: 0.80, step: 0.01 },
@@ -377,7 +377,7 @@ export const czMarket: MarketConfig = {
     electricityPrice: 5.50,
     feedInPrice: 1.50,
     installCostPerKwp: 25000,
-    selfConsumptionRatio: 0.40,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 1, max: 15, step: 0.25 },
@@ -438,7 +438,7 @@ export const deMarket: MarketConfig = {
     electricityPrice: 0.39,
     feedInPrice: 0.08,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.35,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -499,7 +499,7 @@ export const dkMarket: MarketConfig = {
     electricityPrice: 3.50,
     feedInPrice: 0.80,
     installCostPerKwp: 7500,
-    selfConsumptionRatio: 0.40,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 1, max: 6, step: 0.10 },
@@ -560,7 +560,7 @@ export const eeMarket: MarketConfig = {
     electricityPrice: 0.16,
     feedInPrice: 0.05,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.35,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -682,7 +682,7 @@ export const fiMarket: MarketConfig = {
     electricityPrice: 0.17,
     feedInPrice: 0.04,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.35,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -743,7 +743,7 @@ export const frMarket: MarketConfig = {
     electricityPrice: 0.25,
     feedInPrice: 0.10,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.40,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -804,7 +804,7 @@ export const gbMarket: MarketConfig = {
     electricityPrice: 0.26,
     feedInPrice: 0.05,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.45,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.10, max: 0.60, step: 0.01 },
@@ -987,7 +987,7 @@ export const huMarket: MarketConfig = {
     electricityPrice: 100,
     feedInPrice: 25,
     installCostPerKwp: 350000,
-    selfConsumptionRatio: 0.45,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 20, max: 300, step: 5 },
@@ -1048,7 +1048,7 @@ export const ieMarket: MarketConfig = {
     electricityPrice: 0.36,
     feedInPrice: 0.09,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.40,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -1109,7 +1109,7 @@ export const isMarket: MarketConfig = {
     electricityPrice: 22,
     feedInPrice: 5,
     installCostPerKwp: 150000,
-    selfConsumptionRatio: 0.30,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 5, max: 80, step: 1 },
@@ -1170,7 +1170,7 @@ export const itMarket: MarketConfig = {
     electricityPrice: 0.33,
     feedInPrice: 0.08,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.45,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -1231,7 +1231,7 @@ export const ltMarket: MarketConfig = {
     electricityPrice: 0.17,
     feedInPrice: 0.05,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.35,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -1292,7 +1292,7 @@ export const luMarket: MarketConfig = {
     electricityPrice: 0.16,
     feedInPrice: 0.05,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.35,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -1353,7 +1353,7 @@ export const lvMarket: MarketConfig = {
     electricityPrice: 0.19,
     feedInPrice: 0.05,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.35,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -1475,7 +1475,7 @@ export const nlMarket: MarketConfig = {
     electricityPrice: 0.29,
     feedInPrice: 0.07,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.35,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -1536,7 +1536,7 @@ export const noMarket: MarketConfig = {
     electricityPrice: 1.50,
     feedInPrice: 0.30,
     installCostPerKwp: 12000,
-    selfConsumptionRatio: 0.35,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.20, max: 5.00, step: 0.10 },
@@ -1597,7 +1597,7 @@ export const plMarket: MarketConfig = {
     electricityPrice: 0.95,
     feedInPrice: 0.20,
     installCostPerKwp: 4000,
-    selfConsumptionRatio: 0.40,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.20, max: 2.00, step: 0.05 },
@@ -1719,7 +1719,7 @@ export const roMarket: MarketConfig = {
     electricityPrice: 0.70,
     feedInPrice: 0.15,
     installCostPerKwp: 5000,
-    selfConsumptionRatio: 0.45,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.10, max: 2.00, step: 0.05 },
@@ -1780,7 +1780,7 @@ export const seMarket: MarketConfig = {
     electricityPrice: 2.20,
     feedInPrice: 0.50,
     installCostPerKwp: 11000,
-    selfConsumptionRatio: 0.35,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.50, max: 5.00, step: 0.10 },
@@ -1841,7 +1841,7 @@ export const siMarket: MarketConfig = {
     electricityPrice: 0.18,
     feedInPrice: 0.06,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.45,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
@@ -1902,7 +1902,7 @@ export const skMarket: MarketConfig = {
     electricityPrice: 0.20,
     feedInPrice: 0.06,
     installCostPerKwp: 1000,
-    selfConsumptionRatio: 0.40,
+    selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
