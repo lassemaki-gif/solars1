@@ -692,8 +692,8 @@ export const fiMarket: MarketConfig = {
   locale: "fi-FI",
   t: {
     kicker: "№ 01 — Aurinkosi kartta",
-    headline1: "Paljonko aurinkoa",
-    headline2: "katollasi on?",
+    headline1: "Paljonko kattosi",
+    headline2: "tuottaa auringon avulla?",
     body: "Kirjoita suomalainen osoite. Mittaamme kattosi satelliitista, sijoitamme paneelit sinne missä ne tuottavat eniten ja näytämme säästösi 25 vuodessa.",
     pressEnter: "Valitse ehdotus ja paina ↵",
     trust1title: "Satelliittimittaus",
