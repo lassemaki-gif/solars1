@@ -6,9 +6,10 @@ import { mapsLoader } from "@/lib/maps-loader";
 interface Props {
   onPlace: (place: { lat: number; lng: number; address: string }) => void;
   placeholder?: string;
+  countries?: string[];
 }
 
-export function AddressAutocomplete({ onPlace, placeholder }: Props) {
+export function AddressAutocomplete({ onPlace, placeholder, countries = ["fi", "se", "no", "dk"] }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const onPlaceRef = useRef(onPlace);
   onPlaceRef.current = onPlace;
@@ -18,7 +19,7 @@ export function AddressAutocomplete({ onPlace, placeholder }: Props) {
     mapsLoader.importLibrary("places").then((places) => {
       if (!inputRef.current) return;
       ac = new places.Autocomplete(inputRef.current, {
-        componentRestrictions: { country: ["fi", "se", "no", "dk"] },
+        componentRestrictions: { country: countries },
         fields: ["geometry", "formatted_address"],
         types: ["address"],
       });

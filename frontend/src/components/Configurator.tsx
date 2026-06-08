@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { FinanceResponse, InsightsResponse } from "@/lib/api";
+import type { MarketConfig } from "@/lib/market";
 
 interface Props {
   insights: InsightsResponse;
@@ -9,6 +10,7 @@ interface Props {
   loadingFinance: boolean;
   financeError?: string | null;
   targetPanels: number;
+  market: MarketConfig;
   onChange: (params: {
     targetPanels: number;
     electricity_price: number;
@@ -18,14 +20,14 @@ interface Props {
   }) => void;
 }
 
-export function Configurator({ insights, finance, loadingFinance, financeError, targetPanels, onChange }: Props) {
+export function Configurator({ insights, finance, loadingFinance, financeError, targetPanels, market, onChange }: Props) {
   const max = insights.maxArrayPanelsCount ?? 1;
   const panelW = insights.panelCapacityWatts ?? 400;
 
-  const [elec, setElec] = useState(0.18);
-  const [fit, setFit] = useState(0.05);
-  const [capex, setCapex] = useState(750);
-  const [scr, setScr] = useState(0.45);
+  const [elec, setElec] = useState(market.defaults.electricityPrice);
+  const [fit, setFit] = useState(market.defaults.feedInPrice);
+  const [capex, setCapex] = useState(market.defaults.installCostPerKwp);
+  const [scr, setScr] = useState(market.defaults.selfConsumptionRatio);
 
   const emit = (patch: Partial<{ targetPanels: number; elec: number; fit: number; capex: number; scr: number }>) => {
     onChange({
@@ -39,12 +41,14 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
 
   const sysKwp = (targetPanels * panelW) / 1000;
 
+  const { t, locale } = market;
+
   return (
     <div className="space-y-8">
       {/* System size slider */}
       <div>
         <div className="flex items-baseline justify-between mb-2">
-          <label className="text-sm uppercase tracking-widest text-ash">System size</label>
+          <label className="text-sm uppercase tracking-widest text-ash">{t.systemSize}</label>
           <span className="mono text-2xl">{sysKwp.toFixed(2)} <span className="text-base text-ash">kWp</span></span>
         </div>
         <input
@@ -59,29 +63,29 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
           className="w-full accent-sun"
         />
         <div className="flex justify-between mono text-xs text-ash mt-1">
-          <span>1 panel</span>
-          <span>{targetPanels} panels</span>
-          <span>{max} max</span>
+          <span>1 {t.panel}</span>
+          <span>{targetPanels} {t.panels}</span>
+          <span>{max} {t.max}</span>
         </div>
       </div>
 
       {/* Finance inputs */}
       <details className="border-t border-ink/20 pt-6">
         <summary className="cursor-pointer text-sm uppercase tracking-widest text-ash select-none">
-          Adjust assumptions
+          {t.adjustAssumptions}
         </summary>
         <div className="grid grid-cols-2 gap-6 mt-6">
           <Field
-            label="Electricity price"
+            label={t.electricityPrice}
             unit="€/kWh"
             value={elec}
             step={0.01}
             min={0.05}
-            max={0.5}
+            max={0.6}
             onChange={(v) => { setElec(v); emit({ elec: v }); }}
           />
           <Field
-            label="Feed-in price"
+            label={t.feedInPrice}
             unit="€/kWh"
             value={fit}
             step={0.01}
@@ -90,7 +94,7 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
             onChange={(v) => { setFit(v); emit({ fit: v }); }}
           />
           <Field
-            label="Install cost"
+            label={t.installCost}
             unit="€/kWp"
             value={capex}
             step={50}
@@ -99,7 +103,7 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
             onChange={(v) => { setCapex(v); emit({ capex: v }); }}
           />
           <Field
-            label="Self-consumption"
+            label={t.selfConsumption}
             unit="%"
             value={scr * 100}
             step={5}
@@ -115,30 +119,30 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
         {financeError ? (
           <p className="text-red-600 text-sm font-mono">{financeError}</p>
         ) : loadingFinance && !finance ? (
-          <p className="text-ash italic">Calculating…</p>
+          <p className="text-ash italic">{t.calculating}</p>
         ) : finance ? (
           <>
-            <Stat label="Annual production" value={finance.annual_kwh_year_one.toLocaleString("fi-FI")} unit="kWh / yr" />
+            <Stat label={t.annualProduction} value={finance.annual_kwh_year_one.toLocaleString(locale)} unit={t.kwhPerYear} />
             <Stat
-              label="Year-one savings"
-              value={`€${finance.finance.annual_savings_year_one_eur.toLocaleString("fi-FI", { maximumFractionDigits: 0 })}`}
+              label={t.yearOneSavings}
+              value={`€${finance.finance.annual_savings_year_one_eur.toLocaleString(locale, { maximumFractionDigits: 0 })}`}
             />
             <Stat
-              label="System cost"
-              value={`€${finance.finance.capex_eur.toLocaleString("fi-FI", { maximumFractionDigits: 0 })}`}
+              label={t.systemCost}
+              value={`€${finance.finance.capex_eur.toLocaleString(locale, { maximumFractionDigits: 0 })}`}
             />
             <Stat
-              label="Payback"
-              value={finance.finance.payback_years != null ? `${finance.finance.payback_years} years` : "> 25 yr"}
+              label={t.payback}
+              value={finance.finance.payback_years != null ? `${finance.finance.payback_years} ${t.years}` : t.over25yr}
               accent
             />
             <Stat
-              label="25-year net gain"
-              value={`€${finance.finance.lifetime_savings_eur.toLocaleString("fi-FI", { maximumFractionDigits: 0 })}`}
+              label={t.lifetimeGain}
+              value={`€${finance.finance.lifetime_savings_eur.toLocaleString(locale, { maximumFractionDigits: 0 })}`}
             />
             <Stat
-              label="CO₂ offset / yr"
-              value={`${finance.co2_offset_kg_year_one.toLocaleString("fi-FI", { maximumFractionDigits: 0 })} kg`}
+              label={t.co2Offset}
+              value={`${finance.co2_offset_kg_year_one.toLocaleString(locale, { maximumFractionDigits: 0 })} kg`}
             />
           </>
         ) : null}
