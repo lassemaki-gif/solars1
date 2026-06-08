@@ -71,13 +71,13 @@ export const atMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.27,
     feedInPrice: 0.06,
-    installCostPerKwp: 1200,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.40,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "de-AT",
   t: {
@@ -132,13 +132,13 @@ export const beMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.29,
     feedInPrice: 0.05,
-    installCostPerKwp: 1200,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.35,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "nl-BE",
   t: {
@@ -199,7 +199,7 @@ export const bgMarket: MarketConfig = {
   ranges: {
     electricityPrice: { min: 0.05, max: 0.50, step: 0.01 },
     feedInPrice: { min: 0, max: 0.20, step: 0.01 },
-    installCostPerKwp: { min: 800, max: 5000, step: 100 },
+    installCostPerKwp: { min: 800, max: 2000, step: 100 },
   },
   locale: "bg-BG",
   t: {
@@ -254,13 +254,13 @@ export const chMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.27,
     feedInPrice: 0.06,
-    installCostPerKwp: 1500,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.35,
   },
   ranges: {
     electricityPrice: { min: 0.10, max: 0.80, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 500, max: 3000, step: 50 },
+    installCostPerKwp: { min: 500, max: 1000, step: 50 },
   },
   locale: "de-CH",
   t: {
@@ -315,13 +315,13 @@ export const cyMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.24,
     feedInPrice: 0.08,
-    installCostPerKwp: 1400,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.60,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "el-CY",
   t: {
@@ -376,13 +376,13 @@ export const czMarket: MarketConfig = {
   defaults: {
     electricityPrice: 5.50,
     feedInPrice: 1.50,
-    installCostPerKwp: 30000,
+    installCostPerKwp: 25000,
     selfConsumptionRatio: 0.40,
   },
   ranges: {
     electricityPrice: { min: 1, max: 15, step: 0.25 },
     feedInPrice: { min: 0, max: 5, step: 0.25 },
-    installCostPerKwp: { min: 10000, max: 80000, step: 1000 },
+    installCostPerKwp: { min: 10000, max: 25000, step: 1000 },
   },
   locale: "cs-CZ",
   t: {
@@ -443,7 +443,7 @@ export const deMarket: MarketConfig = {
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "de-DE",
   t: {
@@ -498,13 +498,13 @@ export const dkMarket: MarketConfig = {
   defaults: {
     electricityPrice: 3.50,
     feedInPrice: 0.80,
-    installCostPerKwp: 9000,
+    installCostPerKwp: 7500,
     selfConsumptionRatio: 0.40,
   },
   ranges: {
     electricityPrice: { min: 1, max: 6, step: 0.10 },
     feedInPrice: { min: 0, max: 2, step: 0.05 },
-    installCostPerKwp: { min: 4000, max: 20000, step: 500 },
+    installCostPerKwp: { min: 4000, max: 7500, step: 500 },
   },
   locale: "da-DK",
   t: {
@@ -559,13 +559,13 @@ export const eeMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.16,
     feedInPrice: 0.05,
-    installCostPerKwp: 1200,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.35,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "et-EE",
   t: {
@@ -626,7 +626,7 @@ export const esMarket: MarketConfig = {
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "es-ES",
   t: {
@@ -681,13 +681,13 @@ export const fiMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.17,
     feedInPrice: 0.04,
-    installCostPerKwp: 1200,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.35,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "fi-FI",
   t: {
@@ -742,13 +742,13 @@ export const frMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.25,
     feedInPrice: 0.10,
-    installCostPerKwp: 1100,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.40,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "fr-FR",
   t: {
@@ -803,13 +803,13 @@ export const gbMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.26,
     feedInPrice: 0.05,
-    installCostPerKwp: 1100,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.45,
   },
   ranges: {
     electricityPrice: { min: 0.10, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "en-GB",
   t: {
@@ -870,7 +870,7 @@ export const grMarket: MarketConfig = {
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "el-GR",
   t: {
@@ -925,13 +925,13 @@ export const hrMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.13,
     feedInPrice: 0.05,
-    installCostPerKwp: 1100,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.50,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "hr-HR",
   t: {
@@ -992,7 +992,7 @@ export const huMarket: MarketConfig = {
   ranges: {
     electricityPrice: { min: 20, max: 300, step: 5 },
     feedInPrice: { min: 0, max: 100, step: 5 },
-    installCostPerKwp: { min: 100000, max: 800000, step: 10000 },
+    installCostPerKwp: { min: 100000, max: 400000, step: 10000 },
   },
   locale: "hu-HU",
   t: {
@@ -1047,13 +1047,13 @@ export const ieMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.36,
     feedInPrice: 0.09,
-    installCostPerKwp: 1500,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.40,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "en-IE",
   t: {
@@ -1108,13 +1108,13 @@ export const isMarket: MarketConfig = {
   defaults: {
     electricityPrice: 22,
     feedInPrice: 5,
-    installCostPerKwp: 180000,
+    installCostPerKwp: 150000,
     selfConsumptionRatio: 0.30,
   },
   ranges: {
     electricityPrice: { min: 5, max: 80, step: 1 },
     feedInPrice: { min: 0, max: 20, step: 1 },
-    installCostPerKwp: { min: 80000, max: 500000, step: 10000 },
+    installCostPerKwp: { min: 80000, max: 150000, step: 10000 },
   },
   locale: "is-IS",
   t: {
@@ -1169,13 +1169,13 @@ export const itMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.33,
     feedInPrice: 0.08,
-    installCostPerKwp: 1200,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.45,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "it-IT",
   t: {
@@ -1230,13 +1230,13 @@ export const ltMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.17,
     feedInPrice: 0.05,
-    installCostPerKwp: 1200,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.35,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "lt-LT",
   t: {
@@ -1291,13 +1291,13 @@ export const luMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.16,
     feedInPrice: 0.05,
-    installCostPerKwp: 1300,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.35,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "fr-LU",
   t: {
@@ -1352,13 +1352,13 @@ export const lvMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.19,
     feedInPrice: 0.05,
-    installCostPerKwp: 1200,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.35,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "lv-LV",
   t: {
@@ -1413,13 +1413,13 @@ export const mtMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.13,
     feedInPrice: 0.06,
-    installCostPerKwp: 1400,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.65,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "en-MT",
   t: {
@@ -1474,13 +1474,13 @@ export const nlMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.29,
     feedInPrice: 0.07,
-    installCostPerKwp: 1100,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.35,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "nl-NL",
   t: {
@@ -1535,13 +1535,13 @@ export const noMarket: MarketConfig = {
   defaults: {
     electricityPrice: 1.50,
     feedInPrice: 0.30,
-    installCostPerKwp: 14000,
+    installCostPerKwp: 12000,
     selfConsumptionRatio: 0.35,
   },
   ranges: {
     electricityPrice: { min: 0.20, max: 5.00, step: 0.10 },
     feedInPrice: { min: 0, max: 2.00, step: 0.05 },
-    installCostPerKwp: { min: 5000, max: 25000, step: 500 },
+    installCostPerKwp: { min: 5000, max: 12000, step: 500 },
   },
   locale: "nb-NO",
   t: {
@@ -1596,13 +1596,13 @@ export const plMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.95,
     feedInPrice: 0.20,
-    installCostPerKwp: 4500,
+    installCostPerKwp: 4000,
     selfConsumptionRatio: 0.40,
   },
   ranges: {
     electricityPrice: { min: 0.20, max: 2.00, step: 0.05 },
     feedInPrice: { min: 0, max: 1.00, step: 0.02 },
-    installCostPerKwp: { min: 2000, max: 10000, step: 200 },
+    installCostPerKwp: { min: 2000, max: 4000, step: 200 },
   },
   locale: "pl-PL",
   t: {
@@ -1663,7 +1663,7 @@ export const ptMarket: MarketConfig = {
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "pt-PT",
   t: {
@@ -1718,13 +1718,13 @@ export const roMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.70,
     feedInPrice: 0.15,
-    installCostPerKwp: 5500,
+    installCostPerKwp: 5000,
     selfConsumptionRatio: 0.45,
   },
   ranges: {
     electricityPrice: { min: 0.10, max: 2.00, step: 0.05 },
     feedInPrice: { min: 0, max: 0.80, step: 0.02 },
-    installCostPerKwp: { min: 2000, max: 12000, step: 200 },
+    installCostPerKwp: { min: 2000, max: 5000, step: 200 },
   },
   locale: "ro-RO",
   t: {
@@ -1779,13 +1779,13 @@ export const seMarket: MarketConfig = {
   defaults: {
     electricityPrice: 2.20,
     feedInPrice: 0.50,
-    installCostPerKwp: 15000,
+    installCostPerKwp: 11000,
     selfConsumptionRatio: 0.35,
   },
   ranges: {
     electricityPrice: { min: 0.50, max: 5.00, step: 0.10 },
     feedInPrice: { min: 0, max: 2.00, step: 0.05 },
-    installCostPerKwp: { min: 5000, max: 25000, step: 500 },
+    installCostPerKwp: { min: 5000, max: 12000, step: 500 },
   },
   locale: "sv-SE",
   t: {
@@ -1840,13 +1840,13 @@ export const siMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.18,
     feedInPrice: 0.06,
-    installCostPerKwp: 1200,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.45,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "sl-SI",
   t: {
@@ -1901,13 +1901,13 @@ export const skMarket: MarketConfig = {
   defaults: {
     electricityPrice: 0.20,
     feedInPrice: 0.06,
-    installCostPerKwp: 1100,
+    installCostPerKwp: 1000,
     selfConsumptionRatio: 0.40,
   },
   ranges: {
     electricityPrice: { min: 0.05, max: 0.60, step: 0.01 },
     feedInPrice: { min: 0, max: 0.30, step: 0.01 },
-    installCostPerKwp: { min: 400, max: 2500, step: 50 },
+    installCostPerKwp: { min: 400, max: 1000, step: 50 },
   },
   locale: "sk-SK",
   t: {
