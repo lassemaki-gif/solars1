@@ -1,4 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "SoLars — Solar savings calculator for Europe",
+  description: "Instant solar panel savings estimates for homes across 31 European countries. Local tariffs, satellite roof analysis, certified installers.",
+  openGraph: {
+    title: "SoLars — Solar savings calculator for Europe",
+    description: "Instant solar panel savings estimates for homes across 31 European countries. Local tariffs, satellite roof analysis, certified installers.",
+    siteName: "SoLars",
+    type: "website",
+    url: "https://solars.solutions",
+  },
+  twitter: {
+    card: "summary",
+    title: "SoLars — Solar savings calculator for Europe",
+    description: "Instant solar panel savings estimates for homes across 31 European countries.",
+  },
+  alternates: {
+    canonical: "https://solars.solutions",
+  },
+};
 import {
   atMarket, beMarket, bgMarket, chMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,

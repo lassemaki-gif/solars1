@@ -1,0 +1,31 @@
+import type { Metadata } from "next";
+import type { MarketConfig } from "./market";
+
+export function marketMetadata(config: MarketConfig): Metadata {
+  const title = `SoLars — ${config.edition}`;
+  const description =
+    config.t.body.length > 155
+      ? config.t.body.slice(0, 152) + "..."
+      : config.t.body;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      siteName: "SoLars",
+      locale: config.locale,
+      type: "website",
+      url: `https://solars.solutions/${config.id}`,
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `https://solars.solutions/${config.id}`,
+    },
+  };
+}
