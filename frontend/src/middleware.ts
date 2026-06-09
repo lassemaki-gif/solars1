@@ -22,7 +22,12 @@ export function middleware(request: NextRequest) {
 
   const route = country ? countryRoutes[country.toUpperCase()] : undefined;
   if (route) {
-    return NextResponse.redirect(new URL(route, request.url));
+    const dest = new URL(route, request.url);
+    // Preserve UTM params and any other query params through the redirect
+    request.nextUrl.searchParams.forEach((value, key) => {
+      dest.searchParams.set(key, value);
+    });
+    return NextResponse.redirect(dest);
   }
 
   return NextResponse.next();
