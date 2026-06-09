@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { hreflangAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "SoLars — Solar savings calculator for Europe",
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://solars.solutions",
+    languages: hreflangAlternates,
   },
 };
 import {
