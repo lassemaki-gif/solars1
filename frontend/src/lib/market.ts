@@ -57,6 +57,10 @@ export interface MarketConfig {
     lifetimeGain: string;
     co2Offset: string;
   };
+  installer?: {
+    name: string;
+    phone?: string;
+  };
 }
 
 export const atMarket: MarketConfig = {
@@ -118,6 +122,7 @@ export const atMarket: MarketConfig = {
     lifetimeGain: "25-Jahre-Ertrag",
     co2Offset: "CO₂-Einsparung/Jahr",
   },
+  installer: { name: "Otovo GmbH" },
 };
 
 export const beMarket: MarketConfig = {
@@ -179,6 +184,7 @@ export const beMarket: MarketConfig = {
     lifetimeGain: "Netto winst 25 jaar",
     co2Offset: "CO₂-reductie/jaar",
   },
+  installer: { name: "EnergyVision", phone: "+3293838296" },
 };
 
 export const bgMarket: MarketConfig = {
@@ -240,6 +246,7 @@ export const bgMarket: MarketConfig = {
     lifetimeGain: "Нетна печалба 25 год.",
     co2Offset: "CO₂ намаление/год.",
   },
+  installer: { name: "Solarpro", phone: "+35924224152" },
 };
 
 export const chMarket: MarketConfig = {
@@ -301,6 +308,7 @@ export const chMarket: MarketConfig = {
     lifetimeGain: "25-Jahre-Ertrag",
     co2Offset: "CO₂-Einsparung/Jahr",
   },
+  installer: { name: "Helion Energy", phone: "+41325528110" },
 };
 
 export const cyMarket: MarketConfig = {
@@ -362,6 +370,7 @@ export const cyMarket: MarketConfig = {
     lifetimeGain: "Καθαρό κέρδος 25 ετών",
     co2Offset: "Μείωση CO₂/έτος",
   },
+  installer: { name: "Trikkis Energy", phone: "+35770003242" },
 };
 
 export const czMarket: MarketConfig = {
@@ -423,6 +432,7 @@ export const czMarket: MarketConfig = {
     lifetimeGain: "Čistý zisk za 25 let",
     co2Offset: "Úspora CO₂/rok",
   },
+  installer: { name: "ČEZ", phone: "+420371100351" },
 };
 
 export const deMarket: MarketConfig = {
@@ -484,6 +494,7 @@ export const deMarket: MarketConfig = {
     lifetimeGain: "25-Jahre-Ertrag",
     co2Offset: "CO₂-Einsparung/Jahr",
   },
+  installer: { name: "Enpal", phone: "+493030808052" },
 };
 
 export const dkMarket: MarketConfig = {
@@ -545,6 +556,7 @@ export const dkMarket: MarketConfig = {
     lifetimeGain: "Netto gevinst 25 år",
     co2Offset: "CO₂-reducering/år",
   },
+  installer: { name: "1KOMMA5° Danmark", phone: "+4570207474" },
 };
 
 export const eeMarket: MarketConfig = {
@@ -606,6 +618,7 @@ export const eeMarket: MarketConfig = {
     lifetimeGain: "Netokasum 25 aastaga",
     co2Offset: "CO₂ vähendus/aastas",
   },
+  installer: { name: "Enefit", phone: "+3727774040" },
 };
 
 export const esMarket: MarketConfig = {
@@ -667,6 +680,7 @@ export const esMarket: MarketConfig = {
     lifetimeGain: "Beneficio neto 25 años",
     co2Offset: "Reducción CO₂ / año",
   },
+  installer: { name: "Iberdrola", phone: "+34916496328" },
 };
 
 export const fiMarket: MarketConfig = {
@@ -728,6 +742,7 @@ export const fiMarket: MarketConfig = {
     lifetimeGain: "Nettohyöty 25 vuodessa",
     co2Offset: "CO₂-säästö/vuosi",
   },
+  installer: { name: "1KOMMA5° Suomi", phone: "+358407783899" },
 };
 
 export const frMarket: MarketConfig = {
@@ -789,6 +804,7 @@ export const frMarket: MarketConfig = {
     lifetimeGain: "Gain net sur 25 ans",
     co2Offset: "Réduction CO₂ / an",
   },
+  installer: { name: "EDF ENR", phone: "+33969375757" },
 };
 
 export const gbMarket: MarketConfig = {
@@ -850,6 +866,7 @@ export const gbMarket: MarketConfig = {
     lifetimeGain: "25-year net gain",
     co2Offset: "CO₂ offset / yr",
   },
+  installer: { name: "Project Solar UK", phone: "+441283562520" },
 };
 
 export const grMarket: MarketConfig = {
@@ -911,6 +928,7 @@ export const grMarket: MarketConfig = {
     lifetimeGain: "Καθαρό κέρδος 25 ετών",
     co2Offset: "Μείωση CO₂/έτος",
   },
+  installer: { name: "PPC (ΔΕΗ)", phone: "+302112110770" },
 };
 
 export const hrMarket: MarketConfig = {
@@ -972,6 +990,7 @@ export const hrMarket: MarketConfig = {
     lifetimeGain: "Neto zarada 25 god.",
     co2Offset: "Smanjenje CO₂/god.",
   },
+  installer: { name: "Solar Pro d.o.o.", phone: "+385953004804" },
 };
 
 export const huMarket: MarketConfig = {
@@ -1033,6 +1052,7 @@ export const huMarket: MarketConfig = {
     lifetimeGain: "Nettó nyereség 25 év",
     co2Offset: "CO₂-megtakarítás/év",
   },
+  installer: { name: "MVM Optimum", phone: "+36205275370" },
 };
 
 export const ieMarket: MarketConfig = {
@@ -1094,6 +1114,7 @@ export const ieMarket: MarketConfig = {
     lifetimeGain: "25-year net gain",
     co2Offset: "CO₂ offset / yr",
   },
+  installer: { name: "Activ8 Solar Energies", phone: "+353429690352" },
 };
 
 export const isMarket: MarketConfig = {
@@ -1216,6 +1237,7 @@ export const itMarket: MarketConfig = {
     lifetimeGain: "Guadagno netto 25 anni",
     co2Offset: "Riduzione CO₂ / anno",
   },
+  installer: { name: "Enel", phone: "+390664511012" },
 };
 
 export const ltMarket: MarketConfig = {
@@ -1277,6 +1299,7 @@ export const ltMarket: MarketConfig = {
     lifetimeGain: "Grynasis pelnas 25 m.",
     co2Offset: "CO₂ sumažinimas/m.",
   },
+  installer: { name: "Ignitis", phone: "+37061121802" },
 };
 
 export const luMarket: MarketConfig = {
@@ -1338,6 +1361,7 @@ export const luMarket: MarketConfig = {
     lifetimeGain: "Gain net sur 25 ans",
     co2Offset: "Réduction CO₂ / an",
   },
+  installer: { name: "Enovos", phone: "+35227379275" },
 };
 
 export const lvMarket: MarketConfig = {
@@ -1399,6 +1423,7 @@ export const lvMarket: MarketConfig = {
     lifetimeGain: "Neto peļņa 25 g.",
     co2Offset: "CO₂ samazinājums/g.",
   },
+  installer: { name: "AJ Power", phone: "+37167969140" },
 };
 
 export const mtMarket: MarketConfig = {
@@ -1521,6 +1546,7 @@ export const nlMarket: MarketConfig = {
     lifetimeGain: "Netto winst 25 jaar",
     co2Offset: "CO₂-reductie/jaar",
   },
+  installer: { name: "Zonneplan", phone: "+31880203000" },
 };
 
 export const noMarket: MarketConfig = {
@@ -1582,6 +1608,7 @@ export const noMarket: MarketConfig = {
     lifetimeGain: "Netto gevinst 25 år",
     co2Offset: "CO₂-reduksjon/år",
   },
+  installer: { name: "Solcellespesialisten", phone: "+4769109065" },
 };
 
 export const plMarket: MarketConfig = {
@@ -1643,6 +1670,7 @@ export const plMarket: MarketConfig = {
     lifetimeGain: "Zysk netto 25 lat",
     co2Offset: "Redukcja CO₂/rok",
   },
+  installer: { name: "Columbus Energy", phone: "+48123073096" },
 };
 
 export const ptMarket: MarketConfig = {
@@ -1704,6 +1732,7 @@ export const ptMarket: MarketConfig = {
     lifetimeGain: "Ganho líquido 25 anos",
     co2Offset: "Redução CO₂ / ano",
   },
+  installer: { name: "EDP", phone: "+351213535353" },
 };
 
 export const roMarket: MarketConfig = {
@@ -1765,6 +1794,7 @@ export const roMarket: MarketConfig = {
     lifetimeGain: "Câștig net 25 ani",
     co2Offset: "Reducere CO₂/an",
   },
+  installer: { name: "Simtel", phone: "+40374490286" },
 };
 
 export const seMarket: MarketConfig = {
@@ -1826,6 +1856,7 @@ export const seMarket: MarketConfig = {
     lifetimeGain: "Nettovinst 25 år",
     co2Offset: "CO₂-minskning/år",
   },
+  installer: { name: "Svea Solar", phone: "+46101712640" },
 };
 
 export const siMarket: MarketConfig = {
@@ -1887,6 +1918,7 @@ export const siMarket: MarketConfig = {
     lifetimeGain: "Neto dobiček 25 let",
     co2Offset: "Zmanjšanje CO₂/leto",
   },
+  installer: { name: "GEN-I Sonce", phone: "+38615896090" },
 };
 
 export const skMarket: MarketConfig = {
@@ -1948,6 +1980,7 @@ export const skMarket: MarketConfig = {
     lifetimeGain: "Čistý zisk 25 rokov",
     co2Offset: "Úspora CO₂/rok",
   },
+  installer: { name: "ZSE", phone: "+421850111555" },
 };
 
 export const nordicMarket: MarketConfig = fiMarket;

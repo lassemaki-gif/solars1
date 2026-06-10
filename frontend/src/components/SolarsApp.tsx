@@ -142,8 +142,26 @@ export function SolarsApp({ config }: { config: MarketConfig }) {
             />
           )}
 
+          {insights && config.installer && (
+            <div className="mt-8 pt-8 border-t-2 border-ink">
+              <p className="text-xs uppercase tracking-widest text-ash mb-1">Certified installer</p>
+              <p className="font-display text-lg mb-4">{config.installer.name}</p>
+              {config.installer.phone ? (
+                <a
+                  href={`tel:${config.installer.phone}`}
+                  className="flex items-center justify-between w-full bg-sun text-paper px-6 py-4 hover:bg-ink transition-colors duration-200 group"
+                >
+                  <span className="font-display text-xl">Call now</span>
+                  <span className="mono text-sm opacity-80 group-hover:opacity-100">{config.installer.phone}</span>
+                </a>
+              ) : (
+                <p className="text-sm text-ash">Contact via web for a quote.</p>
+              )}
+            </div>
+          )}
+
           {insights && (
-            <div className="mt-10 pt-8 border-t-2 border-ink">
+            <div className="mt-8 pt-8 border-t-2 border-ink">
               <AdBanner slot="4853670761" format="auto" />
             </div>
           )}
