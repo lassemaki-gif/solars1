@@ -13,9 +13,11 @@ class FinanceRequest(BaseModel):
     lat: float = Field(..., ge=-90, le=90)
     lng: float = Field(..., ge=-180, le=180)
     target_kwp: Optional[float] = Field(None, ge=0, le=100)
-    electricity_price: Optional[float] = Field(None, ge=0, le=2)
-    feed_in_price: Optional[float] = Field(None, ge=0, le=2)
-    install_cost_per_kwp: Optional[float] = Field(None, ge=0, le=150000)
+    # Prices are currency-agnostic (EUR, GBP, JPY, KRW, …) so only a lower
+    # bound makes sense — upper bounds were euro-only and break non-EUR markets.
+    electricity_price: Optional[float] = Field(None, ge=0)
+    feed_in_price: Optional[float] = Field(None, ge=0)
+    install_cost_per_kwp: Optional[float] = Field(None, ge=0)
     self_consumption_ratio: Optional[float] = Field(None, ge=0, le=1)
 
 
