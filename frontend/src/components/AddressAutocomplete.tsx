@@ -10,71 +10,42 @@ interface Props {
 }
 
 export function AddressAutocomplete({ onPlace, placeholder, countries = ["fi", "se", "no", "dk"] }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const onPlaceRef = useRef(onPlace);
   onPlaceRef.current = onPlace;
 
   useEffect(() => {
-    let mounted = true;
-    let element: google.maps.places.PlaceAutocompleteElement | null = null;
-
-    mapsLoader.importLibrary("places").then(() => {
-      if (!mounted || !containerRef.current) return;
-
-      element = new google.maps.places.PlaceAutocompleteElement({
+    let ac: google.maps.places.Autocomplete | null = null;
+    mapsLoader.importLibrary("places").then((places) => {
+      if (!inputRef.current) return;
+      ac = new places.Autocomplete(inputRef.current, {
         componentRestrictions: { country: countries },
+        fields: ["geometry", "formatted_address"],
         types: ["address"],
-      } as google.maps.places.PlaceAutocompleteElementOptions);
-
-      element.setAttribute("placeholder", placeholder ?? "Enter an address…");
-      containerRef.current.appendChild(element);
-
-      element.addEventListener("gmp-select", async (e: Event) => {
-        const { place } = e as google.maps.places.PlaceSelectEvent;
-        await place.fetchFields({ fields: ["location", "formattedAddress"] });
-        const loc = place.location;
+      });
+      ac.addListener("place_changed", () => {
+        const p = ac!.getPlace();
+        const loc = p.geometry?.location;
         if (!loc) return;
         onPlaceRef.current({
           lat: loc.lat(),
           lng: loc.lng(),
-          address: place.formattedAddress ?? "",
+          address: p.formatted_address ?? "",
         });
       });
     });
-
     return () => {
-      mounted = false;
-      if (element && containerRef.current?.contains(element)) {
-        containerRef.current.removeChild(element);
-      }
+      if (ac) google.maps.event.clearInstanceListeners(ac);
     };
-  }, []); // mount-only — countries/placeholder don't change per market
+  }, []); // mount-only — onPlace changes are handled via ref
 
   return (
-    <>
-      <style>{`
-        .pac-container-host gmp-placeautocomplete {
-          width: 100%;
-        }
-        gmp-placeautocomplete::part(input) {
-          width: 100%;
-          border: none;
-          border-bottom: 2px solid #1a1a1a;
-          background: transparent;
-          padding: 1rem 0;
-          font-size: 1.5rem;
-          font-family: inherit;
-          color: #1a1a1a;
-          outline: none;
-        }
-        gmp-placeautocomplete::part(input):focus {
-          border-bottom-color: #e3611d;
-        }
-        gmp-placeautocomplete::part(input)::placeholder {
-          color: #5c5b58;
-        }
-      `}</style>
-      <div ref={containerRef} className="w-full" />
-    </>
+    <input
+      ref={inputRef}
+      type="text"
+      autoComplete="off"
+      placeholder={placeholder ?? "Enter a Nordic address…"}
+      className="w-full border-b-2 border-ink bg-transparent py-4 text-2xl placeholder:text-ash focus:outline-none focus:border-sun font-display"
+    />
   );
 }
