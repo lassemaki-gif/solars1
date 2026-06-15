@@ -4,8 +4,8 @@ import {
   atMarket, auMarket, beMarket, bgMarket, caMarket, chMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hrMarket, huMarket, ieMarket, isMarket,
-  itMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
-  noMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
+  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
+  noMarket, nzMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
   usMarket,
 } from "./market";
 
@@ -13,8 +13,8 @@ const allMarkets: MarketConfig[] = [
   atMarket, auMarket, beMarket, bgMarket, caMarket, chMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hrMarket, huMarket, ieMarket, isMarket,
-  itMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
-  noMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
+  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
+  noMarket, nzMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
   usMarket,
 ];
 

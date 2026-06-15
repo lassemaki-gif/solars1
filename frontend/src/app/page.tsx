@@ -26,8 +26,8 @@ import {
   atMarket, auMarket, beMarket, bgMarket, caMarket, chMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hrMarket, huMarket, ieMarket, isMarket,
-  itMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
-  noMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
+  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
+  noMarket, nzMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
   usMarket,
 } from "@/lib/market";
 import type { MarketConfig } from "@/lib/market";
@@ -73,6 +73,12 @@ const globalMarkets: { href: string; config: MarketConfig }[] = [
   { href: "/us", config: usMarket },
   { href: "/ca", config: caMarket },
   { href: "/au", config: auMarket },
+  { href: "/nz", config: nzMarket },
+];
+
+const asiaMarkets: { href: string; config: MarketConfig }[] = [
+  { href: "/jp", config: jpMarket },
+  { href: "/kr", config: krMarket },
 ];
 
 function MarketCard({ href, config }: { href: string; config: MarketConfig }) {
@@ -145,7 +151,7 @@ export default function Hub() {
         </div>
       </section>
 
-      <section className="px-8 lg:px-12 pb-16 mt-8">
+      <section className="px-8 lg:px-12 pb-8 mt-8">
         <p className="text-xs uppercase tracking-widest text-ash mb-3">Americas &amp; Oceania</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px bg-ink/10 border border-ink/10">
           {globalMarkets.map(({ href, config }) => (
@@ -154,9 +160,18 @@ export default function Hub() {
         </div>
       </section>
 
+      <section className="px-8 lg:px-12 pb-16 mt-8">
+        <p className="text-xs uppercase tracking-widest text-ash mb-3">East Asia</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px bg-ink/10 border border-ink/10">
+          {asiaMarkets.map(({ href, config }) => (
+            <MarketCard key={href} href={href} config={config} />
+          ))}
+        </div>
+      </section>
+
       <footer className="mt-auto border-t border-ink/10 px-8 lg:px-12 py-6">
         <p className="text-xs text-ash">
-          Satellite solar modelling · Google Solar API · Certified installers across Europe, the US &amp; Australia
+          Satellite solar modelling · Google Solar API · Certified installers worldwide
         </p>
       </footer>
     </main>
