@@ -11,11 +11,13 @@ export const metadata: Metadata = {
     siteName: "SoLars",
     type: "website",
     url: "https://solars.solutions",
+    images: [{ url: "https://solars.solutions/api/og", width: 1200, height: 630, alt: "SoLars — Solar savings calculator" }],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "SoLars — Solar savings calculator",
     description: "Instant solar savings estimate for your home. Satellite roof analysis, local tariffs, and certified installers across 59 countries.",
+    images: ["https://solars.solutions/api/og"],
   },
   alternates: {
     canonical: "https://solars.solutions",

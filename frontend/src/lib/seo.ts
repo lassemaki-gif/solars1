@@ -30,12 +30,15 @@ export const hreflangAlternates: Record<string, string> = {
   "x-default": "https://solars.solutions",
 };
 
+const BASE = "https://solars.solutions";
+
 export function marketMetadata(config: MarketConfig): Metadata {
   const title = `SoLars — ${config.edition}`;
   const description =
     config.t.body.length > 155
       ? config.t.body.slice(0, 152) + "..."
       : config.t.body;
+  const ogImage = `${BASE}/api/og?id=${config.id}`;
 
   return {
     title,
@@ -46,15 +49,17 @@ export function marketMetadata(config: MarketConfig): Metadata {
       siteName: "SoLars",
       locale: config.locale,
       type: "website",
-      url: `https://solars.solutions/${config.id}`,
+      url: `${BASE}/${config.id}`,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
+      images: [ogImage],
     },
     alternates: {
-      canonical: `https://solars.solutions/${config.id}`,
+      canonical: `${BASE}/${config.id}`,
       languages: hreflangAlternates,
     },
   };
