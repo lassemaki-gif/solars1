@@ -2046,6 +2046,7 @@ export const nzMarket: MarketConfig = {
     lifetimeGain: "25-year net gain",
     co2Offset: "CO₂ offset / yr",
   },
+  installer: { name: "Harrisons Solar", phone: "+64800003355" },
 };
 
 export const jpMarket: MarketConfig = {
@@ -2107,6 +2108,7 @@ export const jpMarket: MarketConfig = {
     lifetimeGain: "25年間の純利益",
     co2Offset: "年間CO₂削減量",
   },
+  installer: { name: "パナソニック（太陽光）", phone: "+81120816081" },
 };
 
 export const krMarket: MarketConfig = {
@@ -2168,6 +2170,7 @@ export const krMarket: MarketConfig = {
     lifetimeGain: "25년 순이익",
     co2Offset: "연간 CO₂ 감축량",
   },
+  installer: { name: "Hanwha Q CELLS", phone: "+8216003400" },
 };
 
 export const caMarket: MarketConfig = {
@@ -2229,6 +2232,7 @@ export const caMarket: MarketConfig = {
     lifetimeGain: "25-year net gain",
     co2Offset: "CO₂ offset / yr",
   },
+  installer: { name: "Polaron Solar", phone: "+18883181988" },
 };
 
 export const usMarket: MarketConfig = {
@@ -2290,6 +2294,7 @@ export const usMarket: MarketConfig = {
     lifetimeGain: "25-year net gain",
     co2Offset: "CO₂ offset / yr",
   },
+  installer: { name: "Sunrun", phone: "+18443216937" },
 };
 
 export const auMarket: MarketConfig = {
@@ -2351,4 +2356,5 @@ export const auMarket: MarketConfig = {
     lifetimeGain: "25-year net gain",
     co2Offset: "CO₂ offset / yr",
   },
+  installer: { name: "Solargain", phone: "+611300739355" },
 };
