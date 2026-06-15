@@ -1,19 +1,21 @@
 import type { Metadata } from "next";
 import type { MarketConfig } from "./market";
 import {
-  atMarket, beMarket, bgMarket, chMarket, cyMarket, czMarket,
+  atMarket, auMarket, beMarket, bgMarket, caMarket, chMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hrMarket, huMarket, ieMarket, isMarket,
   itMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
   noMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
+  usMarket,
 } from "./market";
 
 const allMarkets: MarketConfig[] = [
-  atMarket, beMarket, bgMarket, chMarket, cyMarket, czMarket,
+  atMarket, auMarket, beMarket, bgMarket, caMarket, chMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hrMarket, huMarket, ieMarket, isMarket,
   itMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
   noMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
+  usMarket,
 ];
 
 // Keyed by BCP-47 locale; x-default points to the hub (unsupported countries)

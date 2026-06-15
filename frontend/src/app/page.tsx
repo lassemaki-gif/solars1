@@ -3,19 +3,19 @@ import Link from "next/link";
 import { hreflangAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "SoLars — Solar savings calculator for Europe",
-  description: "Instant solar panel savings estimates for homes across 31 European countries. Local tariffs, satellite roof analysis, certified installers.",
+  title: "SoLars — Solar savings calculator",
+  description: "Instant solar panel savings estimates for homes across Europe, the US, and Australia. Local tariffs, satellite roof analysis, certified installers.",
   openGraph: {
-    title: "SoLars — Solar savings calculator for Europe",
-    description: "Instant solar panel savings estimates for homes across 31 European countries. Local tariffs, satellite roof analysis, certified installers.",
+    title: "SoLars — Solar savings calculator",
+    description: "Instant solar panel savings estimates for homes across Europe, the US, and Australia. Local tariffs, satellite roof analysis, certified installers.",
     siteName: "SoLars",
     type: "website",
     url: "https://solars.solutions",
   },
   twitter: {
     card: "summary",
-    title: "SoLars — Solar savings calculator for Europe",
-    description: "Instant solar panel savings estimates for homes across 31 European countries.",
+    title: "SoLars — Solar savings calculator",
+    description: "Instant solar panel savings estimates for homes across Europe, the US, and Australia.",
   },
   alternates: {
     canonical: "https://solars.solutions",
@@ -23,11 +23,12 @@ export const metadata: Metadata = {
   },
 };
 import {
-  atMarket, beMarket, bgMarket, chMarket, cyMarket, czMarket,
+  atMarket, auMarket, beMarket, bgMarket, caMarket, chMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hrMarket, huMarket, ieMarket, isMarket,
   itMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
   noMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
+  usMarket,
 } from "@/lib/market";
 import type { MarketConfig } from "@/lib/market";
 
@@ -66,6 +67,12 @@ const nonEuMarkets: { href: string; config: MarketConfig }[] = [
   { href: "/ch", config: chMarket },
   { href: "/no", config: noMarket },
   { href: "/is", config: isMarket },
+];
+
+const globalMarkets: { href: string; config: MarketConfig }[] = [
+  { href: "/us", config: usMarket },
+  { href: "/ca", config: caMarket },
+  { href: "/au", config: auMarket },
 ];
 
 function MarketCard({ href, config }: { href: string; config: MarketConfig }) {
@@ -129,7 +136,7 @@ export default function Hub() {
         </div>
       </section>
 
-      <section className="px-8 lg:px-12 pb-16 mt-8">
+      <section className="px-8 lg:px-12 pb-8 mt-8">
         <p className="text-xs uppercase tracking-widest text-ash mb-3">Outside EU</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px bg-ink/10 border border-ink/10">
           {nonEuMarkets.map(({ href, config }) => (
@@ -138,9 +145,18 @@ export default function Hub() {
         </div>
       </section>
 
+      <section className="px-8 lg:px-12 pb-16 mt-8">
+        <p className="text-xs uppercase tracking-widest text-ash mb-3">Americas &amp; Oceania</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px bg-ink/10 border border-ink/10">
+          {globalMarkets.map(({ href, config }) => (
+            <MarketCard key={href} href={href} config={config} />
+          ))}
+        </div>
+      </section>
+
       <footer className="mt-auto border-t border-ink/10 px-8 lg:px-12 py-6">
         <p className="text-xs text-ash">
-          Satellite solar modelling · Google Solar API · Certified installers across Europe
+          Satellite solar modelling · Google Solar API · Certified installers across Europe, the US &amp; Australia
         </p>
       </footer>
     </main>

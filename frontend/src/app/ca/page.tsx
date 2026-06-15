@@ -1,0 +1,10 @@
+import type { Metadata } from "next";
+import { SolarsApp } from "@/components/SolarsApp";
+import { caMarket } from "@/lib/market";
+import { marketMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = marketMetadata(caMarket);
+
+export default function Home() {
+  return <SolarsApp config={caMarket} />;
+}
