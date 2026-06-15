@@ -4,20 +4,22 @@ import {
   arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
   caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
-  gbMarket, grMarket, hrMarket, huMarket, idMarket, ieMarket, isMarket,
+  gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, isMarket,
   itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, mxMarket,
   myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, plMarket,
-  prMarket, ptMarket, roMarket, seMarket, siMarket, skMarket, thMarket, usMarket,
+  prMarket, ptMarket, roMarket, seMarket, sgMarket, siMarket, skMarket,
+  thMarket, twMarket, usMarket,
 } from "./market";
 
 const allMarkets: MarketConfig[] = [
   arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
   caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
-  gbMarket, grMarket, hrMarket, huMarket, idMarket, ieMarket, isMarket,
+  gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, isMarket,
   itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, mxMarket,
   myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, plMarket,
-  prMarket, ptMarket, roMarket, seMarket, siMarket, skMarket, thMarket, usMarket,
+  prMarket, ptMarket, roMarket, seMarket, sgMarket, siMarket, skMarket,
+  thMarket, twMarket, usMarket,
 ];
 
 // Keyed by BCP-47 locale; x-default points to the hub (unsupported countries)
