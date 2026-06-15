@@ -25,10 +25,10 @@ export const metadata: Metadata = {
 import {
   atMarket, auMarket, beMarket, bgMarket, caMarket, chMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
-  gbMarket, grMarket, hrMarket, huMarket, ieMarket, isMarket,
-  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
-  noMarket, nzMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
-  thMarket, usMarket,
+  gbMarket, grMarket, hrMarket, huMarket, idMarket, ieMarket, isMarket,
+  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, myMarket,
+  nlMarket, noMarket, nzMarket, phMarket, plMarket, ptMarket, roMarket,
+  seMarket, siMarket, skMarket, thMarket, usMarket,
 } from "@/lib/market";
 import type { MarketConfig } from "@/lib/market";
 
@@ -80,6 +80,9 @@ const asiaMarkets: { href: string; config: MarketConfig }[] = [
   { href: "/jp", config: jpMarket },
   { href: "/kr", config: krMarket },
   { href: "/th", config: thMarket },
+  { href: "/my", config: myMarket },
+  { href: "/ph", config: phMarket },
+  { href: "/id", config: idMarket },
 ];
 
 function MarketCard({ href, config }: { href: string; config: MarketConfig }) {
