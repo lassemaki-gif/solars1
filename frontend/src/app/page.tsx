@@ -4,10 +4,10 @@ import { hreflangAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "SoLars — Solar savings calculator",
-  description: "Instant solar panel savings estimates for homes across Europe, the US, and Australia. Local tariffs, satellite roof analysis, certified installers.",
+  description: "Instant solar savings estimate for your home. Satellite roof analysis, local tariffs, and certified installers across 59 countries worldwide.",
   openGraph: {
     title: "SoLars — Solar savings calculator",
-    description: "Instant solar panel savings estimates for homes across Europe, the US, and Australia. Local tariffs, satellite roof analysis, certified installers.",
+    description: "Instant solar savings estimate for your home. Satellite roof analysis, local tariffs, and certified installers across 59 countries worldwide.",
     siteName: "SoLars",
     type: "website",
     url: "https://solars.solutions",
@@ -15,11 +15,11 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "SoLars — Solar savings calculator",
-    description: "Instant solar panel savings estimates for homes across Europe, the US, and Australia.",
+    description: "Instant solar savings estimate for your home. Satellite roof analysis, local tariffs, and certified installers across 59 countries.",
   },
   alternates: {
     canonical: "https://solars.solutions",
-    languages: hreflangAlternates,
+    languages: { "x-default": "https://solars.solutions" },
   },
 };
 import {
