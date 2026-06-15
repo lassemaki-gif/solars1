@@ -6,7 +6,7 @@ import {
   gbMarket, grMarket, hrMarket, huMarket, ieMarket, isMarket,
   itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
   noMarket, nzMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
-  usMarket,
+  thMarket, usMarket,
 } from "./market";
 
 const allMarkets: MarketConfig[] = [
@@ -15,7 +15,7 @@ const allMarkets: MarketConfig[] = [
   gbMarket, grMarket, hrMarket, huMarket, ieMarket, isMarket,
   itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, nlMarket,
   noMarket, nzMarket, plMarket, ptMarket, roMarket, seMarket, siMarket, skMarket,
-  usMarket,
+  thMarket, usMarket,
 ];
 
 // Keyed by BCP-47 locale; x-default points to the hub (unsupported countries)

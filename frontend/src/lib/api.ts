@@ -83,8 +83,8 @@ export class ApiError extends Error {
 }
 
 export const api = {
-  insights: (lat: number, lng: number) =>
-    post<InsightsResponse>("/api/insights", { lat, lng, required_quality: "MEDIUM" }),
+  insights: (lat: number, lng: number, requiredQuality: "HIGH" | "MEDIUM" | "BASE" = "MEDIUM") =>
+    post<InsightsResponse>("/api/insights", { lat, lng, required_quality: requiredQuality }),
   finance: (params: {
     lat: number;
     lng: number;

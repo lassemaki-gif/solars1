@@ -40,7 +40,7 @@ export function SolarsApp({ config }: { config: MarketConfig }) {
     setFinance(null);
     setLoadingInsights(true);
     api
-      .insights(selection.lat, selection.lng)
+      .insights(selection.lat, selection.lng, config.requiredQuality)
       .then((data) => {
         setInsights(data);
         setTargetPanels(Math.max(1, Math.round((data.maxArrayPanelsCount ?? 1) * 0.5)));

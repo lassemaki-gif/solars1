@@ -61,6 +61,7 @@ export interface MarketConfig {
     name: string;
     phone?: string;
   };
+  requiredQuality?: "HIGH" | "MEDIUM" | "BASE";
 }
 
 export const atMarket: MarketConfig = {
@@ -2357,4 +2358,67 @@ export const auMarket: MarketConfig = {
     co2Offset: "CO₂ offset / yr",
   },
   installer: { name: "Solargain", phone: "+611300739355" },
+};
+
+export const thMarket: MarketConfig = {
+  id: "th",
+  countryNameEn: "Thailand",
+  countries: ["th"],
+  edition: "ฉบับประเทศไทย",
+  cities: "กรุงเทพฯ · เชียงใหม่ · ภูเก็ต · พัทยา",
+  placeholder: "123 ถนนสุขุมวิท กรุงเทพฯ…",
+  solarDeclination: "มุมดวงอาทิตย์ · 13°N",
+  currencySymbol: "฿",
+  defaults: {
+    electricityPrice: 4.5,
+    feedInPrice: 2.2,
+    installCostPerKwp: 30000,
+    selfConsumptionRatio: 0.50,
+  },
+  ranges: {
+    electricityPrice: { min: 1, max: 10, step: 0.1 },
+    feedInPrice: { min: 0, max: 5, step: 0.1 },
+    installCostPerKwp: { min: 15000, max: 50000, step: 1000 },
+  },
+  locale: "th-TH",
+  requiredQuality: "BASE",
+  t: {
+    kicker: "№ 01 — แผนที่พลังงานแสงอาทิตย์ของคุณ",
+    headline1: "แสงแดดส่องถึง",
+    headline2: "หลังคาของคุณมากแค่ไหน?",
+    body: "พิมพ์ที่อยู่ของคุณ เราจะวัดหลังคาจากภาพถ่ายดาวเทียม วางแผงโซลาร์ในตำแหน่งที่ให้ผลดีที่สุด และแสดงให้เห็นว่าคุณจะประหยัดเงินได้เท่าไรใน 25 ปี",
+    pressEnter: "กด ↵ หลังจากเลือกที่อยู่",
+    trust1title: "วัดด้วยดาวเทียม",
+    trust1body: "วัดพื้นที่หลังคา ความลาดชัน ทิศทาง และร่มเงา ด้วย Google Solar API",
+    trust2title: "อัตราค่าไฟฟ้าไทย",
+    trust2body: "อัตราค่าไฟฟ้าปัจจุบันของ กฟน./กฟภ. อัตรารับซื้อไฟฟ้าส่วนเกิน และต้นทุนการติดตั้งในท้องถิ่น",
+    trust3title: "ผู้ติดตั้งที่ได้รับการรับรอง",
+    trust3body: "รับใบเสนอราคาจากผู้ติดตั้งโซลาร์เซลล์ที่ได้รับการรับรองในประเทศไทย",
+    property: "ที่อยู่",
+    scanningRoof: "กำลังโหลดข้อมูลหลังคา…",
+    noData: "ไม่มีข้อมูล",
+    noCoverage: "ที่อยู่นี้ยังไม่มีข้อมูลดาวเทียมพลังงานแสงอาทิตย์ ลองใช้ที่อยู่ในเขตเมืองใกล้เคียง",
+    tryAnother: "ลองที่อยู่อื่น",
+    disclaimer: "การประมาณการอ้างอิงจาก Google Solar API (ข้อมูลระดับ BASE) และอัตราค่าไฟฟ้าทั่วไปของ กฟน./กฟภ. ผู้ติดตั้งที่ได้รับการรับรองจะให้ใบเสนอราคาที่ถูกต้องหลังจากการสำรวจพื้นที่",
+    systemSize: "ขนาดระบบ",
+    panel: "แผง",
+    panels: "แผง",
+    max: "สูงสุด",
+    adjustAssumptions: "ปรับการตั้งค่า",
+    electricityPrice: "ราคาค่าไฟฟ้า (฿/kWh)",
+    feedInPrice: "อัตรารับซื้อไฟฟ้า (฿/kWh)",
+    installCost: "ค่าติดตั้ง (฿/kWp)",
+    selfConsumption: "อัตราการใช้เองในบ้าน",
+    calculating: "กำลังคำนวณ…",
+    annualProduction: "การผลิตไฟฟ้าต่อปี",
+    kwhPerYear: "kWh/ปี",
+    yearOneSavings: "ประหยัดในปีแรก",
+    systemCost: "ต้นทุนระบบ",
+    payback: "ระยะเวลาคืนทุน",
+    years: "ปี",
+    over25yr: "> 25 ปี",
+    lifetimeGain: "กำไรสุทธิ 25 ปี",
+    co2Offset: "ลด CO₂/ปี",
+  },
+  installer: { name: "Solaris Green Energy", phone: "+66848524608" },
 };
