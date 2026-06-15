@@ -1,21 +1,23 @@
 import type { Metadata } from "next";
 import type { MarketConfig } from "./market";
 import {
-  atMarket, auMarket, beMarket, bgMarket, caMarket, chMarket, cyMarket, czMarket,
+  arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
+  caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hrMarket, huMarket, idMarket, ieMarket, isMarket,
-  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, myMarket,
-  nlMarket, noMarket, nzMarket, phMarket, plMarket, ptMarket, roMarket,
-  seMarket, siMarket, skMarket, thMarket, usMarket,
+  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, mxMarket,
+  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, plMarket,
+  prMarket, ptMarket, roMarket, seMarket, siMarket, skMarket, thMarket, usMarket,
 } from "./market";
 
 const allMarkets: MarketConfig[] = [
-  atMarket, auMarket, beMarket, bgMarket, caMarket, chMarket, cyMarket, czMarket,
+  arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
+  caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hrMarket, huMarket, idMarket, ieMarket, isMarket,
-  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, myMarket,
-  nlMarket, noMarket, nzMarket, phMarket, plMarket, ptMarket, roMarket,
-  seMarket, siMarket, skMarket, thMarket, usMarket,
+  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, mxMarket,
+  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, plMarket,
+  prMarket, ptMarket, roMarket, seMarket, siMarket, skMarket, thMarket, usMarket,
 ];
 
 // Keyed by BCP-47 locale; x-default points to the hub (unsupported countries)

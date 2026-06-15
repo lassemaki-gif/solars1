@@ -23,12 +23,13 @@ export const metadata: Metadata = {
   },
 };
 import {
-  atMarket, auMarket, beMarket, bgMarket, caMarket, chMarket, cyMarket, czMarket,
+  arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
+  caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hrMarket, huMarket, idMarket, ieMarket, isMarket,
-  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, myMarket,
-  nlMarket, noMarket, nzMarket, phMarket, plMarket, ptMarket, roMarket,
-  seMarket, siMarket, skMarket, thMarket, usMarket,
+  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, mxMarket,
+  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, plMarket,
+  prMarket, ptMarket, roMarket, seMarket, siMarket, skMarket, thMarket, usMarket,
 } from "@/lib/market";
 import type { MarketConfig } from "@/lib/market";
 
@@ -83,6 +84,16 @@ const asiaMarkets: { href: string; config: MarketConfig }[] = [
   { href: "/my", config: myMarket },
   { href: "/ph", config: phMarket },
   { href: "/id", config: idMarket },
+];
+
+const latamMarkets: { href: string; config: MarketConfig }[] = [
+  { href: "/mx", config: mxMarket },
+  { href: "/co", config: coMarket },
+  { href: "/pe", config: peMarket },
+  { href: "/cl", config: clMarket },
+  { href: "/br", config: brMarket },
+  { href: "/ar", config: arMarket },
+  { href: "/pr", config: prMarket },
 ];
 
 function MarketCard({ href, config }: { href: string; config: MarketConfig }) {
@@ -164,10 +175,19 @@ export default function Hub() {
         </div>
       </section>
 
-      <section className="px-8 lg:px-12 pb-16 mt-8">
+      <section className="px-8 lg:px-12 pb-8 mt-8">
         <p className="text-xs uppercase tracking-widest text-ash mb-3">Asia</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px bg-ink/10 border border-ink/10">
           {asiaMarkets.map(({ href, config }) => (
+            <MarketCard key={href} href={href} config={config} />
+          ))}
+        </div>
+      </section>
+
+      <section className="px-8 lg:px-12 pb-16 mt-8">
+        <p className="text-xs uppercase tracking-widest text-ash mb-3">Latin America</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px bg-ink/10 border border-ink/10">
+          {latamMarkets.map(({ href, config }) => (
             <MarketCard key={href} href={href} config={config} />
           ))}
         </div>
