@@ -28,9 +28,9 @@ import {
   arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
   caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
-  gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, isMarket,
+  gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, inMarket, isMarket,
   itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, mxMarket,
-  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, plMarket,
+  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, pkMarket, plMarket,
   prMarket, ptMarket, roMarket, seMarket, sgMarket, siMarket, skMarket,
   thMarket, twMarket, usMarket,
 } from "@/lib/market";
@@ -90,6 +90,8 @@ const asiaMarkets: { href: string; config: MarketConfig }[] = [
   { href: "/my", config: myMarket },
   { href: "/ph", config: phMarket },
   { href: "/id", config: idMarket },
+  { href: "/in", config: inMarket },
+  { href: "/pk", config: pkMarket },
 ];
 
 const latamMarkets: { href: string; config: MarketConfig }[] = [

@@ -3,9 +3,9 @@ import {
   arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
   caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
-  gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, isMarket,
+  gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, inMarket, isMarket,
   itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, mxMarket,
-  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, plMarket,
+  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, pkMarket, plMarket,
   prMarket, ptMarket, roMarket, seMarket, sgMarket, siMarket, skMarket,
   thMarket, twMarket, usMarket,
 } from "@/lib/market";
@@ -16,9 +16,9 @@ const markets = [
   arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
   caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
-  gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, isMarket,
+  gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, inMarket, isMarket,
   itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, mxMarket,
-  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, plMarket,
+  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, pkMarket, plMarket,
   prMarket, ptMarket, roMarket, seMarket, sgMarket, siMarket, skMarket,
   thMarket, twMarket, usMarket,
 ];
