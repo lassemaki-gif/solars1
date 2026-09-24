@@ -26,12 +26,12 @@ class LeadRequest(BaseModel):
     email: EmailStr
     phone: str = Field(..., min_length=4, max_length=40)
     address: str = Field(..., min_length=1, max_length=300)
-    lat: float
-    lng: float
-    system_kwp: float
-    annual_kwh: float
-    estimated_cost_eur: float
-    notes: str = ""
+    lat: float = Field(..., ge=-90, le=90)
+    lng: float = Field(..., ge=-180, le=180)
+    system_kwp: float = Field(..., ge=0, le=500)
+    annual_kwh: float = Field(..., ge=0, le=2_000_000)
+    estimated_cost_eur: float = Field(..., ge=0, le=10_000_000)
+    notes: str = Field("", max_length=2000)
 
 
 class LeadResponse(BaseModel):

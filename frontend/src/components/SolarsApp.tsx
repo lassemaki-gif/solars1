@@ -15,6 +15,18 @@ interface Selection {
   address: string;
 }
 
+const jsonLd = (config: MarketConfig) => ({
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: `SoLars — ${config.edition}`,
+  description: config.t.body,
+  url: `https://solars.solutions/${config.id}`,
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+  areaServed: { "@type": "Country", name: config.countryNameEn },
+});
+
 export function SolarsApp({ config }: { config: MarketConfig }) {
   const { t } = config;
 
@@ -77,7 +89,12 @@ export function SolarsApp({ config }: { config: MarketConfig }) {
   }, [selection, insights, targetPanels, financeParams]);
 
   if (!selection) {
-    return <Landing config={config} onPick={setSelection} />;
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(config)) }} />
+        <Landing config={config} onPick={setSelection} />
+      </>
+    );
   }
 
   return (
@@ -135,6 +152,7 @@ export function SolarsApp({ config }: { config: MarketConfig }) {
               financeError={financeError}
               targetPanels={targetPanels}
               market={config}
+              address={selection.address}
               onChange={({ targetPanels: tp, ...rest }) => {
                 setTargetPanels(tp);
                 setFinanceParams(rest);

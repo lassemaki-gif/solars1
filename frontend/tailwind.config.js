@@ -1,16 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        paper: "#f7f4ee",       // warm off-white
-        ink: "#1a1a1a",
-        ash: "#5c5b58",
-        fog: "#d8d4cb",
-        sun: "#e3611d",         // burnt orange accent
-        moss: "#3d4a3a",        // deep forest secondary
-        sky: "#a8b5b8",
+        paper: "rgb(var(--color-paper) / <alpha-value>)",
+        ink:   "rgb(var(--color-ink)   / <alpha-value>)",
+        ash:   "rgb(var(--color-ash)   / <alpha-value>)",
+        fog:   "rgb(var(--color-fog)   / <alpha-value>)",
+        sun:   "rgb(var(--color-sun)   / <alpha-value>)",
+        moss:  "rgb(var(--color-moss)  / <alpha-value>)",
+        sky:   "rgb(var(--color-sky)   / <alpha-value>)",
       },
       fontFamily: {
         display: ["'Fraunces'", "Georgia", "serif"],

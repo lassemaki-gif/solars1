@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { FinanceResponse, InsightsResponse } from "@/lib/api";
 import type { MarketConfig } from "@/lib/market";
+import { SavingsChart } from "@/components/SavingsChart";
 
 interface Props {
   insights: InsightsResponse;
@@ -11,6 +12,7 @@ interface Props {
   financeError?: string | null;
   targetPanels: number;
   market: MarketConfig;
+  address: string;
   onChange: (params: {
     targetPanels: number;
     electricity_price: number;
@@ -20,7 +22,7 @@ interface Props {
   }) => void;
 }
 
-export function Configurator({ insights, finance, loadingFinance, financeError, targetPanels, market, onChange }: Props) {
+export function Configurator({ insights, finance, loadingFinance, financeError, targetPanels, market, address, onChange }: Props) {
   const max = insights.maxArrayPanelsCount ?? 1;
   const panelW = insights.panelCapacityWatts ?? 400;
 
@@ -28,6 +30,8 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
   const [fit, setFit] = useState(market.defaults.feedInPrice);
   const [capex, setCapex] = useState(market.defaults.installCostPerKwp);
   const [scr, setScr] = useState(market.defaults.selfConsumptionRatio);
+  const [battery, setBattery] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const emit = (patch: Partial<{ targetPanels: number; elec: number; fit: number; capex: number; scr: number }>) => {
     onChange({
@@ -39,12 +43,47 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
     });
   };
 
-  const sysKwp = (targetPanels * panelW) / 1000;
+  const toggleBattery = () => {
+    const next = !battery;
+    setBattery(next);
+    const baseSCR = market.defaults.selfConsumptionRatio;
+    const newScr = next ? Math.min(baseSCR + 0.25, 0.90) : baseSCR;
+    setScr(newScr);
+    emit({ scr: newScr });
+  };
 
+  const handleShare = async () => {
+    const sysKwpVal = ((targetPanels * panelW) / 1000).toFixed(1);
+    const savings = finance
+      ? `${market.currencySymbol}${finance.finance.annual_savings_year_one_eur.toLocaleString(market.locale, { maximumFractionDigits: 0 })}/yr`
+      : null;
+    const text = savings
+      ? `My ${sysKwpVal} kWp solar estimate: ${savings} savings. Calculate yours at solars.solutions/${market.id}`
+      : `Calculate your solar savings at solars.solutions/${market.id}`;
+    const url = `https://solars.solutions/${market.id}`;
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ title: "My solar estimate — SoLars", text, url });
+      } else {
+        await navigator.clipboard.writeText(`${text}\n${url}`);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch {}
+  };
+
+  const sysKwp = (targetPanels * panelW) / 1000;
   const { t, locale, currencySymbol } = market;
 
   return (
     <div className="space-y-8">
+      {/* BASE quality coverage warning */}
+      {market.requiredQuality === "BASE" && (
+        <div className="bg-sun/10 border border-sun/30 px-4 py-3 text-xs text-ash leading-relaxed">
+          ⚠ Satellite imagery for this market uses BASE resolution. Estimates may be less precise than in markets with HIGH resolution data.
+        </div>
+      )}
+
       {/* System size slider */}
       <div>
         <div className="flex items-baseline justify-between mb-2">
@@ -56,10 +95,7 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
           min={1}
           max={max}
           value={Math.min(targetPanels, max)}
-          onChange={(e) => {
-            const v = parseInt(e.target.value, 10);
-            emit({ targetPanels: v });
-          }}
+          onChange={(e) => emit({ targetPanels: parseInt(e.target.value, 10) })}
           className="w-full accent-sun"
         />
         <div className="flex justify-between mono text-xs text-ash mt-1">
@@ -69,13 +105,29 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
         </div>
       </div>
 
+      {/* Battery toggle */}
+      <div className="flex items-center justify-between border-t border-ink/20 pt-5">
+        <div>
+          <p className="text-sm uppercase tracking-widest text-ash">Battery storage</p>
+          <p className="text-xs text-ash/70 mt-0.5">~5 kWh home battery, +25% self-consumption</p>
+        </div>
+        <button
+          onClick={toggleBattery}
+          role="switch"
+          aria-checked={battery}
+          className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${battery ? "bg-sun" : "bg-ink/20"}`}
+        >
+          <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-paper transition-transform duration-200 ${battery ? "translate-x-5" : ""}`} />
+        </button>
+      </div>
+
       {/* Finance inputs */}
       <details className="border-t border-ink/20 pt-6">
         <summary className="cursor-pointer text-sm uppercase tracking-widest text-ash select-none">
           {t.adjustAssumptions}
         </summary>
         <div className="grid grid-cols-2 gap-6 mt-6">
-          <Field
+          <FieldInput
             label={t.electricityPrice}
             unit={`${currencySymbol}/kWh`}
             value={elec}
@@ -84,7 +136,7 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
             max={market.ranges.electricityPrice.max}
             onChange={(v) => { setElec(v); emit({ elec: v }); }}
           />
-          <Field
+          <FieldInput
             label={t.feedInPrice}
             unit={`${currencySymbol}/kWh`}
             value={fit}
@@ -93,7 +145,7 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
             max={market.ranges.feedInPrice.max}
             onChange={(v) => { setFit(v); emit({ fit: v }); }}
           />
-          <Field
+          <FieldInput
             label={t.installCost}
             unit={`${currencySymbol}/kWp`}
             value={capex}
@@ -102,13 +154,13 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
             max={market.ranges.installCostPerKwp.max}
             onChange={(v) => { setCapex(v); emit({ capex: v }); }}
           />
-          <Field
+          <FieldInput
             label={t.selfConsumption}
             unit="%"
             value={scr * 100}
             step={5}
-            min={50}
-            max={90}
+            min={10}
+            max={95}
             onChange={(v) => { setScr(v / 100); emit({ scr: v / 100 }); }}
           />
         </div>
@@ -144,6 +196,17 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
               label={t.co2Offset}
               value={`${finance.co2_offset_kg_year_one.toLocaleString(locale, { maximumFractionDigits: 0 })} kg`}
             />
+
+            {/* 25-year savings chart */}
+            <SavingsChart finance={finance} market={market} />
+
+            {/* Share button */}
+            <button
+              onClick={handleShare}
+              className="w-full mt-2 border border-ink/30 hover:border-ink py-3 text-sm uppercase tracking-widest transition-colors"
+            >
+              {copied ? "✓ Copied to clipboard" : "Share estimate"}
+            </button>
           </>
         ) : null}
       </div>
@@ -151,22 +214,11 @@ export function Configurator({ insights, finance, loadingFinance, financeError, 
   );
 }
 
-function Field({
-  label,
-  unit,
-  value,
-  step,
-  min,
-  max,
-  onChange,
+function FieldInput({
+  label, unit, value, step, min, max, onChange,
 }: {
-  label: string;
-  unit: string;
-  value: number;
-  step: number;
-  min: number;
-  max: number;
-  onChange: (v: number) => void;
+  label: string; unit: string; value: number; step: number;
+  min: number; max: number; onChange: (v: number) => void;
 }) {
   return (
     <label className="block">

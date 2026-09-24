@@ -11,8 +11,11 @@ from __future__ import annotations
 import hmac
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, Header
+from fastapi import FastAPI, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 from sqlalchemy import select
 
 from .config import settings
@@ -38,7 +41,11 @@ async def lifespan(_: FastAPI):
     yield
 
 
+limiter = Limiter(key_func=get_remote_address)
+
 app = FastAPI(title="SolarScope API", version="0.1.0", lifespan=lifespan)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(
     CORSMiddleware,
@@ -55,7 +62,8 @@ async def health() -> dict:
 
 
 @app.post("/api/insights")
-async def insights(body: InsightsRequest) -> dict:
+@limiter.limit("30/minute")
+async def insights(request: Request, body: InsightsRequest) -> dict:
     try:
         raw = await fetch_building_insights(
             body.lat, body.lng, required_quality=body.required_quality
@@ -66,7 +74,8 @@ async def insights(body: InsightsRequest) -> dict:
 
 
 @app.post("/api/finance")
-async def finance(body: FinanceRequest) -> dict:
+@limiter.limit("30/minute")
+async def finance(request: Request, body: FinanceRequest) -> dict:
     try:
         raw = await fetch_building_insights(body.lat, body.lng)
     except SolarAPIError as e:
@@ -108,7 +117,8 @@ async def finance(body: FinanceRequest) -> dict:
 
 
 @app.post("/api/leads", response_model=LeadResponse)
-async def create_lead(body: LeadRequest) -> LeadResponse:
+@limiter.limit("5/minute")
+async def create_lead(request: Request, body: LeadRequest) -> LeadResponse:
     async with async_session() as session:
         lead = Lead(
             name=body.name,
