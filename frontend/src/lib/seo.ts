@@ -1,24 +1,24 @@
 import type { Metadata } from "next";
 import type { MarketConfig } from "./market";
 import {
-  arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
-  caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
+  agMarket, alMarket, arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
+  bsMarket, caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, inMarket, isMarket,
-  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, mxMarket,
-  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, pkMarket, plMarket,
-  prMarket, ptMarket, roMarket, seMarket, sgMarket, siMarket, skMarket,
+  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mcMarket, mtMarket, mxMarket,
+  myMarket, moMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, pkMarket, plMarket,
+  prMarket, ptMarket, roMarket, rsMarket, seMarket, sgMarket, siMarket, skMarket, smMarket,
   thMarket, twMarket, usMarket,
 } from "./market";
 
 const allMarkets: MarketConfig[] = [
-  arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
-  caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
+  agMarket, alMarket, arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
+  bsMarket, caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, inMarket, isMarket,
-  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, mxMarket,
-  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, pkMarket, plMarket,
-  prMarket, ptMarket, roMarket, seMarket, sgMarket, siMarket, skMarket,
+  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mcMarket, mtMarket, mxMarket,
+  myMarket, moMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, pkMarket, plMarket,
+  prMarket, ptMarket, roMarket, rsMarket, seMarket, sgMarket, siMarket, skMarket, smMarket,
   thMarket, twMarket, usMarket,
 ];
 

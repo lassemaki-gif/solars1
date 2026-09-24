@@ -25,13 +25,13 @@ export const metadata: Metadata = {
   },
 };
 import {
-  arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
-  caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
+  agMarket, alMarket, arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
+  bsMarket, caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
   gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, inMarket, isMarket,
-  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mtMarket, mxMarket,
-  myMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, pkMarket, plMarket,
-  prMarket, ptMarket, roMarket, seMarket, sgMarket, siMarket, skMarket,
+  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mcMarket, mtMarket, mxMarket,
+  myMarket, moMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, pkMarket, plMarket,
+  prMarket, ptMarket, roMarket, rsMarket, seMarket, sgMarket, siMarket, skMarket, smMarket,
   thMarket, twMarket, usMarket,
 } from "@/lib/market";
 import type { MarketConfig } from "@/lib/market";
@@ -71,6 +71,10 @@ const nonEuMarkets: { href: string; config: MarketConfig }[] = [
   { href: "/ch", config: chMarket },
   { href: "/no", config: noMarket },
   { href: "/is", config: isMarket },
+  { href: "/rs", config: rsMarket },
+  { href: "/al", config: alMarket },
+  { href: "/mc", config: mcMarket },
+  { href: "/sm", config: smMarket },
 ];
 
 const globalMarkets: { href: string; config: MarketConfig }[] = [
@@ -92,6 +96,7 @@ const asiaMarkets: { href: string; config: MarketConfig }[] = [
   { href: "/id", config: idMarket },
   { href: "/in", config: inMarket },
   { href: "/pk", config: pkMarket },
+  { href: "/mo", config: moMarket },
 ];
 
 const latamMarkets: { href: string; config: MarketConfig }[] = [
@@ -102,6 +107,8 @@ const latamMarkets: { href: string; config: MarketConfig }[] = [
   { href: "/br", config: brMarket },
   { href: "/ar", config: arMarket },
   { href: "/pr", config: prMarket },
+  { href: "/bs", config: bsMarket },
+  { href: "/ag", config: agMarket },
 ];
 
 function MarketCard({ href, config }: { href: string; config: MarketConfig }) {
