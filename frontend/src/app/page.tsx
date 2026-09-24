@@ -208,8 +208,20 @@ export default function Hub() {
         </div>
       </section>
 
-      <footer className="mt-auto border-t border-ink/10 px-8 lg:px-12 py-6">
-        <p className="text-xs text-ash">
+      <footer className="mt-auto border-t border-ink/10 px-8 lg:px-12 py-12">
+        <div className="max-w-2xl mb-8">
+          <p className="text-xs uppercase tracking-widest text-ash mb-4">Our mission</p>
+          <p className="font-display text-2xl font-light leading-snug tracking-tight mb-4">
+            Solar savings have always been locked behind pushy salespeople and opaque quotes.
+            SoLars puts the numbers in your hands first —
+            <span className="italic text-sun"> no sign-up, no sales call, just your roof and the math.</span>
+          </p>
+          <p className="text-ash leading-relaxed">
+            Most people don&apos;t go solar because they don&apos;t know if it makes financial sense
+            for <em>their</em> roof. We fix that. Free, instant, satellite-accurate — across 68 countries.
+          </p>
+        </div>
+        <p className="text-xs text-ash border-t border-ink/10 pt-6">
           Satellite solar modelling · Google Solar API · Certified installers worldwide
         </p>
       </footer>
