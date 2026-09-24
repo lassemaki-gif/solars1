@@ -8,8 +8,8 @@ const nextConfig = {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https://*.googleapis.com https://*.gstatic.com https://*.googlesyndication.com https://www.googletagmanager.com",
-      "connect-src 'self' https://solars1-production.up.railway.app https://maps.googleapis.com https://www.google-analytics.com https://www.googletagmanager.com",
-      "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
+      "connect-src 'self' https://api.solars.solutions https://solars1-production.up.railway.app https://maps.googleapis.com https://www.google-analytics.com https://www.googletagmanager.com https://*.adtrafficquality.google https://*.googlesyndication.com https://*.doubleclick.net",
+      "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com",
       "object-src 'none'",
       "base-uri 'self'",
     ].join("; ");
