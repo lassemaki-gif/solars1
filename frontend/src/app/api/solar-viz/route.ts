@@ -72,10 +72,9 @@ export async function POST(req: NextRequest) {
 
     const textPart = parts.find((p) => p.text)?.text ?? "";
     console.error("[solar-viz] no image part. text:", textPart);
-    return NextResponse.json({ error: `Gemini returned no image${textPart ? ": " + textPart : ""}` }, { status: 500 });
+    return NextResponse.json({ error: "Image generation failed. Please try again." }, { status: 500 });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    console.error("[solar-viz]", msg);
-    return NextResponse.json({ error: msg }, { status: 500 });
+    console.error("[solar-viz]", e instanceof Error ? e.message : String(e));
+    return NextResponse.json({ error: "Image generation failed. Please try again." }, { status: 500 });
   }
 }

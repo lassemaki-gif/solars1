@@ -8,6 +8,7 @@ Routes:
 """
 from __future__ import annotations
 
+import hmac
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Header
@@ -43,8 +44,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "X-Leads-Secret"],
 )
 
 
@@ -129,7 +130,9 @@ async def create_lead(body: LeadRequest) -> LeadResponse:
 
 @app.get("/api/leads")
 async def list_leads(x_leads_secret: str | None = Header(default=None)) -> list[dict]:
-    if not settings.leads_secret or x_leads_secret != settings.leads_secret:
+    if not settings.leads_secret or not hmac.compare_digest(
+        x_leads_secret or "", settings.leads_secret
+    ):
         raise HTTPException(status_code=401, detail="Unauthorized")
     async with async_session() as session:
         rows = (await session.execute(select(Lead).order_by(Lead.created_at.desc()))).scalars().all()
