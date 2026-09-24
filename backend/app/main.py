@@ -6,8 +6,6 @@ Routes:
   POST /api/leads      — capture an installer lead
   GET  /api/health     — liveness probe
 """
-from __future__ import annotations
-
 import hmac
 from contextlib import asynccontextmanager
 
