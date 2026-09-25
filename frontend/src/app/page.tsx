@@ -4,10 +4,10 @@ import { hreflangAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "SoLars — Solar savings calculator",
-  description: "Instant solar savings estimate for your home. Satellite roof analysis, local tariffs, and certified installers across 68 countries worldwide.",
+  description: "Instant solar savings estimate for your home. Satellite roof analysis, local tariffs, and certified installers across 78 markets worldwide.",
   openGraph: {
     title: "SoLars — Solar savings calculator",
-    description: "Instant solar savings estimate for your home. Satellite roof analysis, local tariffs, and certified installers across 68 countries worldwide.",
+    description: "Instant solar savings estimate for your home. Satellite roof analysis, local tariffs, and certified installers across 78 markets worldwide.",
     siteName: "SoLars",
     type: "website",
     url: "https://solars.solutions",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "SoLars — Solar savings calculator",
-    description: "Instant solar savings estimate for your home. Satellite roof analysis, local tariffs, and certified installers across 68 countries.",
+    description: "Instant solar savings estimate for your home. Satellite roof analysis, local tariffs, and certified installers across 78 markets.",
     images: ["https://solars.solutions/api/og"],
   },
   alternates: {
@@ -28,9 +28,12 @@ import {
   agMarket, alMarket, arMarket, atMarket, auMarket, beMarket, bgMarket, brMarket,
   bsMarket, caMarket, chMarket, clMarket, coMarket, cyMarket, czMarket,
   deMarket, dkMarket, eeMarket, esMarket, fiMarket, frMarket,
-  gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket, inMarket, isMarket,
-  itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket, mcMarket, mtMarket, mxMarket,
-  myMarket, moMarket, nlMarket, noMarket, nzMarket, peMarket, phMarket, pkMarket, plMarket,
+  gbMarket, grMarket, hkMarket, hrMarket, huMarket, idMarket, ieMarket,
+  inMarket, inBnMarket, inGuMarket, inHiMarket, inKnMarket, inMlMarket,
+  inMrMarket, inOrMarket, inPaMarket, inTaMarket, inTeMarket,
+  isMarket, itMarket, jpMarket, krMarket, ltMarket, luMarket, lvMarket,
+  mcMarket, mtMarket, mxMarket, myMarket, moMarket, nlMarket, noMarket,
+  nzMarket, peMarket, phMarket, pkMarket, plMarket,
   prMarket, ptMarket, roMarket, rsMarket, seMarket, sgMarket, siMarket, skMarket, smMarket,
   thMarket, twMarket, usMarket,
 } from "@/lib/market";
@@ -94,9 +97,22 @@ const asiaMarkets: { href: string; config: MarketConfig }[] = [
   { href: "/my", config: myMarket },
   { href: "/ph", config: phMarket },
   { href: "/id", config: idMarket },
-  { href: "/in", config: inMarket },
   { href: "/pk", config: pkMarket },
   { href: "/mo", config: moMarket },
+];
+
+const indiaMarkets: { href: string; config: MarketConfig }[] = [
+  { href: "/in",    config: inMarket },
+  { href: "/in-hi", config: inHiMarket },
+  { href: "/in-bn", config: inBnMarket },
+  { href: "/in-te", config: inTeMarket },
+  { href: "/in-mr", config: inMrMarket },
+  { href: "/in-ta", config: inTaMarket },
+  { href: "/in-gu", config: inGuMarket },
+  { href: "/in-kn", config: inKnMarket },
+  { href: "/in-ml", config: inMlMarket },
+  { href: "/in-pa", config: inPaMarket },
+  { href: "/in-or", config: inOrMarket },
 ];
 
 const latamMarkets: { href: string; config: MarketConfig }[] = [
@@ -170,7 +186,7 @@ export default function Hub() {
           </p>
           <p className="text-ash leading-relaxed">
             Most people don&apos;t go solar because they don&apos;t know if it makes financial sense
-            for <em>their</em> roof. We fix that. Free, instant, satellite-accurate — across 68 countries.
+            for <em>their</em> roof. We fix that. Free, instant, satellite-accurate — across 78 markets.
           </p>
         </div>
       </section>
@@ -206,6 +222,15 @@ export default function Hub() {
         <p className="text-xs uppercase tracking-widest text-ash mb-3">Asia</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px bg-ink/10 border border-ink/10">
           {asiaMarkets.map(({ href, config }) => (
+            <MarketCard key={href} href={href} config={config} />
+          ))}
+        </div>
+      </section>
+
+      <section className="px-8 lg:px-12 pb-8 mt-8">
+        <p className="text-xs uppercase tracking-widest text-ash mb-3">India — 11 languages</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px bg-ink/10 border border-ink/10">
+          {indiaMarkets.map(({ href, config }) => (
             <MarketCard key={href} href={href} config={config} />
           ))}
         </div>
